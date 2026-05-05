@@ -22,11 +22,11 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         .login-header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background: #ffffff;
             border-radius: 16px 16px 0 0;
             padding: 40px 32px;
             text-align: center;
-            color: white;
+            color: #2c3e50;
         }
         .login-header .icon {
             font-size: 3rem;
@@ -82,7 +82,7 @@
                         <img src="{{ asset('storage/' . $toko->logo) }}" alt="Logo">
                     @endif
                 @else
-                    <div class="icon"><i class="bi bi-shop"></i></div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Tagepe Toko Logo">
                 @endif
             </div>
 

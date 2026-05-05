@@ -40,6 +40,9 @@
         <div class="card border-0 shadow-sm" style="border-radius:14px">
             <div class="card-body">
                 <h5 class="mb-3">Pilih Produk</h5>
+                <div class="mb-3">
+                    <input type="text" id="searchKasir" class="form-control" placeholder="🔍 Cari nama produk...">
+                </div>
                 
                 @if($produks->count() == 0)
                     <div class="alert alert-warning">
@@ -55,28 +58,44 @@
                 <div class="row g-3" id="produk-list">
                     @foreach($produks as $produk)
                     @php
-                        // Ambil stok dari cabang jika ada
-                        $stok = $cabang_id && $produk->stokCabangs->first() 
-                            ? $produk->stokCabangs->first()->stok 
+                        $stok = $cabang_id && $produk->stokCabangs->first()
+                            ? $produk->stokCabangs->first()->stok
                             : $produk->stok;
+                        $foto = $produk->foto
+                            ? (str_starts_with($produk->foto, 'http') ? $produk->foto : asset('storage/'.$produk->foto))
+                            : null;
                     @endphp
-                    <div class="col-md-4">
-                        <div class="card h-100 produk-item" style="cursor:pointer;border-radius:10px" 
+                    <div class="col-6 col-md-3">
+                        <div class="card h-100 produk-item border-0 shadow-sm"
+                             style="cursor:pointer;border-radius:12px;transition:transform .15s,box-shadow .15s"
                              data-id="{{ $produk->id }}"
-                             data-nama="{{ $produk->nama_produk }}"
+                             data-nama="{{ $produk->nama }}"
                              data-harga="{{ $produk->harga }}"
-                             data-stok="{{ $stok }}">
-                            <div class="card-body text-center">
-                                @if($produk->foto)
-                                    @if(str_starts_with($produk->foto, 'http'))
-                                        <img src="{{ $produk->foto }}" class="img-fluid mb-2" style="height:80px;object-fit:cover;border-radius:8px">
-                                    @else
-                                        <img src="{{ asset('storage/' . $produk->foto) }}" class="img-fluid mb-2" style="height:80px;object-fit:cover;border-radius:8px">
-                                    @endif
+                             data-stok="{{ $stok }}"
+                             onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'"
+                             onmouseout="this.style.transform='';this.style.boxShadow=''">
+                            {{-- Foto --}}
+                            <div style="height:130px;overflow:hidden;border-radius:12px 12px 0 0;background:#f0f4f8">
+                                @if($foto)
+                                    <img src="{{ $foto }}" alt="{{ $produk->nama }}"
+                                         style="width:100%;height:100%;object-fit:cover">
+                                @else
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <i class="bi bi-image text-muted" style="font-size:2.5rem"></i>
+                                    </div>
                                 @endif
-                                <h6 class="mb-1">{{ $produk->nama_produk }}</h6>
-                                <p class="text-muted small mb-1">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                                <span class="badge bg-info">Stok: {{ $stok }}</span>
+                            </div>
+                            {{-- Info --}}
+                            <div class="card-body p-2 text-center">
+                                <div class="fw-semibold small mb-1" style="font-size:.82rem;line-height:1.3">{{ $produk->nama }}</div>
+                                <div class="text-primary fw-bold small">Rp {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                                <div class="mt-1">
+                                    @if($stok > 0)
+                                        <span class="badge bg-success" style="font-size:.7rem">Stok: {{ $stok }}</span>
+                                    @else
+                                        <span class="badge bg-danger" style="font-size:.7rem">Habis</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,6 +124,13 @@
                     </div>
                     
                     <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-person me-1"></i>Nama Kasir / Shift</label>
+                        <input type="text" name="kasir" class="form-control" 
+                               placeholder="Contoh: Budi - Shift Pagi"
+                               value="{{ session('kasir_nama', '') }}" required>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Bayar</label>
                         <input type="number" name="bayar" id="bayar" class="form-control" required min="0" step="1000">
                     </div>
@@ -126,6 +152,15 @@
 <script>
 let cart = [];
 let total = 0;
+
+// Pencarian produk di kasir
+document.getElementById('searchKasir').addEventListener('input', function() {
+    const keyword = this.value.toLowerCase();
+    document.querySelectorAll('.produk-item').forEach(card => {
+        const nama = card.dataset.nama?.toLowerCase() || '';
+        card.closest('.col-6').style.display = nama.includes(keyword) ? '' : 'none';
+    });
+});
 
 // Tambah produk ke cart
 document.querySelectorAll('.produk-item').forEach(item => {

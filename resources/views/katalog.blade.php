@@ -169,7 +169,7 @@
                         {{-- Deskripsi --}}
                         @if($p->deskripsi)
                             <p class="text-muted small mb-0" style="line-height:1.5">
-                                {{ Str::limit($p->deskripsi, 60) }}
+                                {{ \Illuminate\Support\Str::limit($p->deskripsi, 60) }}
                             </p>
                         @endif
 
@@ -209,7 +209,7 @@
         @else
             <p class="mb-1"><i class="bi bi-shop me-1"></i> <strong style="color:white">Data Toko</strong></p>
         @endif
-        <p class="small mb-0 mt-2 opacity-75">Sistem Manajemen Toko &mdash; Dibuat dengan Laravel</p>
+        <p class="small mb-0 mt-2 opacity-75">Sistem Manajemen Toko gue ! &mdash; Dibuat dengan bismillah</p>
     </div>
 </footer>
 

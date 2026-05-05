@@ -35,7 +35,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td><strong>{{ $cabang->kode_cabang }}</strong></td>
                         <td>{{ $cabang->nama_cabang }}</td>
-                        <td>{{ Str::limit($cabang->alamat, 50) }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($cabang->alamat, 50) }}</td>
                         <td>{{ $cabang->telepon }}</td>
                         <td><span class="badge bg-info">{{ $cabang->stok_cabangs_count }} produk</span></td>
                         <td>

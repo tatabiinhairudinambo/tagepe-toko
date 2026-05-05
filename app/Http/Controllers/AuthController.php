@@ -23,13 +23,24 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Auth::attempt() otomatis cek email & cocokkan password hash di database
+        // Rate limiting: max 5 percobaan per menit per IP
+        $key = 'login.' . $request->ip();
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+            return back()->withErrors([
+                'email' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik."
+            ])->withInput();
+        }
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate(); // keamanan: buat session ID baru
+            \Illuminate\Support\Facades\RateLimiter::clear($key);
+            $request->session()->regenerate();
             return redirect()->route('dashboard');
         }
 
-        return back()->withErrors(['Email atau password salah.'])->withInput();
+        \Illuminate\Support\Facades\RateLimiter::hit($key, 60);
+
+        return back()->withErrors(['email' => 'Email atau password salah.'])->withInput();
     }
 
     public function logout(Request $request)

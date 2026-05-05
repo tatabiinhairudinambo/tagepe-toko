@@ -167,10 +167,6 @@
             <span>Tanggal</span>
             <span>{{ $transaksi->tanggal->format('d/m/Y H:i') }}</span>
         </div>
-        <div class="info-row">
-            <span>Kasir</span>
-            <span>{{ $transaksi->kasir }}</span>
-        </div>
         @if($transaksi->cabang)
         <div class="info-row">
             <span>Cabang</span>

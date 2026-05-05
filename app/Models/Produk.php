@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
-    protected $fillable = ['nama_produk', 'kode_produk', 'kategori_id', 'harga', 'stok', 'deskripsi', 'foto'];
+    protected $fillable = ['nama', 'kategori_id', 'harga', 'stok', 'stok_minimum', 'deskripsi', 'foto', 'status', 'dibuat_oleh'];
 
     public function kategori()
     {
@@ -21,5 +21,10 @@ class Produk extends Model
     public function transaksiDetails()
     {
         return $this->hasMany(TransaksiDetail::class);
+    }
+
+    public function dibuatOleh()
+    {
+        return $this->belongsTo(User::class, 'dibuat_oleh');
     }
 }

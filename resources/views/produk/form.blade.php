@@ -40,6 +40,11 @@
                 @error('stok')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="mb-3">
+                <label class="form-label">Stok Minimum <span class="text-muted small">(notifikasi jika stok di bawah ini)</span></label>
+                <input type="number" name="stok_minimum" class="form-control"
+                       value="{{ old('stok_minimum', $produk->stok_minimum ?? 5) }}" min="0">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Deskripsi</label>
                 <textarea name="deskripsi" class="form-control" rows="3">{{ old('deskripsi', $produk->deskripsi ?? '') }}</textarea>
             </div>

@@ -141,13 +141,24 @@
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
-        <a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') || request()->routeIs('transaksi.store') ? 'active' : '' }}">
+
+        @if(Auth::user()->role === 'kasir')
+        <a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') ? 'active' : '' }}">
             <i class="bi bi-cart-check"></i> Kasir
         </a>
+        <a href="{{ route('pemesanan.index') }}" class="{{ request()->routeIs('pemesanan.*') ? 'active' : '' }}">
+            <i class="bi bi-receipt"></i> Pemesanan
+        </a>
+        <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i> Produk
+        </a>
+        @endif
+
+        @if(Auth::user()->role === 'admin')
         <a href="{{ route('transaksi.laporan') }}" class="{{ request()->routeIs('transaksi.laporan') || request()->routeIs('transaksi.show') ? 'active' : '' }}">
             <i class="bi bi-graph-up"></i> Laporan
         </a>
-        
+
         <div class="nav-label mt-3">Data Master</div>
         <a href="{{ route('kategori.index') }}" class="{{ request()->routeIs('kategori.*') ? 'active' : '' }}">
             <i class="bi bi-tags"></i> Kategori
@@ -158,9 +169,13 @@
         <a href="{{ route('cabang.index') }}" class="{{ request()->routeIs('cabang.*') ? 'active' : '' }}">
             <i class="bi bi-building"></i> Cabang
         </a>
+        <a href="{{ route('user.index') }}" class="{{ request()->routeIs('user.*') ? 'active' : '' }}">
+            <i class="bi bi-people"></i> User
+        </a>
         <a href="{{ route('toko.index') }}" class="{{ request()->routeIs('toko.*') ? 'active' : '' }}">
             <i class="bi bi-shop"></i> Data Toko
         </a>
+        @endif
 
         <div class="nav-label mt-3">Publik</div>
         <a href="{{ route('katalog') }}" target="_blank">
@@ -191,7 +206,60 @@
 <div class="main-wrapper">
     <div class="topbar">
         <span class="topbar-title">@yield('title', 'Dashboard')</span>
-        <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i>{{ now()->translatedFormat('d F Y') }}</span>
+        <div class="d-flex align-items-center gap-3">
+            {{-- Notifikasi stok menipis --}}
+            @php
+                $user = Auth::user();
+                if ($user->role === 'kasir' && $user->cabang_id) {
+                    $stokMenipis = \App\Models\StokCabang::with('produk')
+                        ->where('cabang_id', $user->cabang_id)
+                        ->whereHas('produk', fn($q) => $q->where('status','aktif'))
+                        ->whereColumn('stok', '<=', \Illuminate\Support\Facades\DB::raw('(SELECT stok_minimum FROM produks WHERE produks.id = stok_cabangs.produk_id)'))
+                        ->where('stok', '>', 0)->get();
+                    $stokHabis = \App\Models\StokCabang::where('cabang_id', $user->cabang_id)->where('stok', 0)->count();
+                } else {
+                    $stokMenipis = \App\Models\Produk::whereColumn('stok', '<=', 'stok_minimum')->where('stok', '>', 0)->where('status', 'aktif')->get();
+                    $stokHabis = \App\Models\Produk::where('stok', 0)->where('status', 'aktif')->count();
+                }
+            @endphp
+            @if($stokMenipis->count() > 0 || $stokHabis > 0)
+            <div class="dropdown">
+                <button class="btn btn-sm position-relative" style="background:rgba(231,76,60,.1);color:#e74c3c;border:1px solid rgba(231,76,60,.2);border-radius:8px"
+                        data-bs-toggle="dropdown">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.6rem">
+                        {{ $stokMenipis->count() + $stokHabis }}
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0" style="min-width:280px;border-radius:12px;overflow:hidden">
+                    <div class="p-3 border-bottom" style="background:#fff3f3">
+                        <strong class="small text-danger"><i class="bi bi-exclamation-triangle me-1"></i>Peringatan Stok</strong>
+                    </div>
+                    @if($stokHabis > 0)
+                    <div class="px-3 py-2 border-bottom bg-light">
+                        <span class="badge bg-danger me-2">Habis</span>
+                        <span class="small">{{ $stokHabis }} produk stok habis</span>
+                    </div>
+                    @endif
+                    @foreach($stokMenipis->take(5) as $p)
+                    <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+                        <span class="small">{{ $p->nama ?? $p->produk->nama ?? '-' }}</span>
+                        <span class="badge bg-warning text-dark">Sisa {{ $p->stok }}</span>
+                    </div>
+                    @endforeach
+                    @if($stokMenipis->count() > 5)
+                    <div class="px-3 py-2 text-center">
+                        <span class="small text-muted">+{{ $stokMenipis->count() - 5 }} produk lainnya</span>
+                    </div>
+                    @endif
+                    <div class="p-2 text-center border-top">
+                        <a href="{{ route('produk.index') }}" class="small text-primary">Lihat semua produk →</a>
+                    </div>
+                </div>
+            </div>
+            @endif
+            <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i>{{ now()->translatedFormat('d F Y') }}</span>
+        </div>
     </div>
 
     <div class="main-content">
@@ -223,12 +291,13 @@
                     @endif
                 </p>
             @else
-                <p class="mb-0">Sistem Manajemen Toko</p>
+                <p class="mb-0">sistem manajemen gue!</p>
             @endif
         </div>
     </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
 </body>
 </html>
