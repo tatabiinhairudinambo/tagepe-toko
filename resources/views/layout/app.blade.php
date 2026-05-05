@@ -155,6 +155,9 @@
         <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.*') ? 'active' : '' }}">
             <i class="bi bi-box-seam"></i> Produk
         </a>
+        <a href="{{ route('cabang.index') }}" class="{{ request()->routeIs('cabang.*') ? 'active' : '' }}">
+            <i class="bi bi-building"></i> Cabang
+        </a>
         <a href="{{ route('toko.index') }}" class="{{ request()->routeIs('toko.*') ? 'active' : '' }}">
             <i class="bi bi-shop"></i> Data Toko
         </a>

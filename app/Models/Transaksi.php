@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Transaksi extends Model
 {
     protected $fillable = [
+        'cabang_id',
         'kode_transaksi',
         'tanggal',
         'total',
@@ -26,5 +27,10 @@ class Transaksi extends Model
     public function details(): HasMany
     {
         return $this->hasMany(TransaksiDetail::class);
+    }
+
+    public function cabang()
+    {
+        return $this->belongsTo(Cabang::class);
     }
 }

@@ -39,7 +39,13 @@ Route::middleware('auth')->group(function () {
     // Transaksi
     Route::get('/transaksi', [\App\Http\Controllers\TransaksiController::class, 'index'])->name('transaksi.index');
     Route::post('/transaksi', [\App\Http\Controllers\TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::post('/transaksi/set-cabang', [\App\Http\Controllers\TransaksiController::class, 'setCabang'])->name('transaksi.setCabang');
     Route::get('/transaksi/laporan', [\App\Http\Controllers\TransaksiController::class, 'laporan'])->name('transaksi.laporan');
     Route::get('/transaksi/{id}', [\App\Http\Controllers\TransaksiController::class, 'show'])->name('transaksi.show');
     Route::get('/transaksi/{id}/struk', [\App\Http\Controllers\TransaksiController::class, 'struk'])->name('transaksi.struk');
+    
+    // Cabang
+    Route::resource('cabang', \App\Http\Controllers\CabangController::class)->except(['show']);
+    Route::get('/cabang/{id}/stok', [\App\Http\Controllers\CabangController::class, 'stok'])->name('cabang.stok');
+    Route::put('/cabang/{id}/stok', [\App\Http\Controllers\CabangController::class, 'updateStok'])->name('cabang.updateStok');
 });

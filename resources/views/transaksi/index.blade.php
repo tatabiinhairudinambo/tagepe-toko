@@ -2,19 +2,70 @@
 @section('title', 'Kasir')
 @section('content')
 
+@if(session('error'))
+<div class="alert alert-danger alert-dismissible fade show">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
+{{-- Pilih Cabang --}}
+@if($cabangs->count() > 0)
+<div class="card border-0 shadow-sm mb-3" style="border-radius:14px">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <label class="form-label mb-0"><i class="bi bi-building me-1"></i> Pilih Cabang</label>
+            </div>
+            <div class="col-md-6">
+                <form action="{{ route('transaksi.setCabang') }}" method="POST">
+                    @csrf
+                    <select name="cabang_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Pilih Cabang --</option>
+                        @foreach($cabangs as $cabang)
+                            <option value="{{ $cabang->id }}" {{ $cabang_id == $cabang->id ? 'selected' : '' }}>
+                                {{ $cabang->nama_cabang }} ({{ $cabang->kode_cabang }})
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <div class="row">
     <div class="col-md-8">
         <div class="card border-0 shadow-sm" style="border-radius:14px">
             <div class="card-body">
                 <h5 class="mb-3">Pilih Produk</h5>
+                
+                @if($produks->count() == 0)
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        @if($cabang_id)
+                            Tidak ada produk dengan stok di cabang ini. Silakan kelola stok cabang terlebih dahulu.
+                        @else
+                            Tidak ada produk dengan stok. Silakan tambah produk atau pilih cabang.
+                        @endif
+                    </div>
+                @endif
+                
                 <div class="row g-3" id="produk-list">
                     @foreach($produks as $produk)
+                    @php
+                        // Ambil stok dari cabang jika ada
+                        $stok = $cabang_id && $produk->stokCabangs->first() 
+                            ? $produk->stokCabangs->first()->stok 
+                            : $produk->stok;
+                    @endphp
                     <div class="col-md-4">
                         <div class="card h-100 produk-item" style="cursor:pointer;border-radius:10px" 
                              data-id="{{ $produk->id }}"
-                             data-nama="{{ $produk->nama }}"
+                             data-nama="{{ $produk->nama_produk }}"
                              data-harga="{{ $produk->harga }}"
-                             data-stok="{{ $produk->stok }}">
+                             data-stok="{{ $stok }}">
                             <div class="card-body text-center">
                                 @if($produk->foto)
                                     @if(str_starts_with($produk->foto, 'http'))
@@ -23,9 +74,9 @@
                                         <img src="{{ asset('storage/' . $produk->foto) }}" class="img-fluid mb-2" style="height:80px;object-fit:cover;border-radius:8px">
                                     @endif
                                 @endif
-                                <h6 class="mb-1">{{ $produk->nama }}</h6>
+                                <h6 class="mb-1">{{ $produk->nama_produk }}</h6>
                                 <p class="text-muted small mb-1">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                                <span class="badge bg-info">Stok: {{ $produk->stok }}</span>
+                                <span class="badge bg-info">Stok: {{ $stok }}</span>
                             </div>
                         </div>
                     </div>
@@ -41,6 +92,7 @@
                 <h5 class="mb-3">Keranjang</h5>
                 <form action="{{ route('transaksi.store') }}" method="POST" id="form-transaksi">
                     @csrf
+                    <input type="hidden" name="cabang_id" value="{{ $cabang_id }}">
                     <div id="cart-items" class="mb-3">
                         <p class="text-muted text-center">Belum ada produk</p>
                     </div>

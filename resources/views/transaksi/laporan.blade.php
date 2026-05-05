@@ -40,6 +40,7 @@
                         <th>No</th>
                         <th>Kode Transaksi</th>
                         <th>Tanggal</th>
+                        <th>Cabang</th>
                         <th>Total</th>
                         <th>Kasir</th>
                         <th>Aksi</th>
@@ -51,6 +52,13 @@
                         <td>{{ $loop->iteration + ($transaksis->currentPage() - 1) * $transaksis->perPage() }}</td>
                         <td><strong>{{ $transaksi->kode_transaksi }}</strong></td>
                         <td>{{ $transaksi->tanggal->format('d/m/Y H:i') }}</td>
+                        <td>
+                            @if($transaksi->cabang)
+                                <span class="badge bg-info">{{ $transaksi->cabang->kode_cabang }}</span>
+                            @else
+                                <span class="badge bg-secondary">-</span>
+                            @endif
+                        </td>
                         <td>Rp {{ number_format($transaksi->total, 0, ',', '.') }}</td>
                         <td>{{ $transaksi->kasir }}</td>
                         <td>
@@ -64,7 +72,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Belum ada transaksi</td>
+                        <td colspan="7" class="text-center text-muted">Belum ada transaksi</td>
                     </tr>
                     @endforelse
                 </tbody>
