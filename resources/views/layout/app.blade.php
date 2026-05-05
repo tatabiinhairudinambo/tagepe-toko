@@ -141,6 +141,14 @@
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
+        <a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') || request()->routeIs('transaksi.store') ? 'active' : '' }}">
+            <i class="bi bi-cart-check"></i> Kasir
+        </a>
+        <a href="{{ route('transaksi.laporan') }}" class="{{ request()->routeIs('transaksi.laporan') || request()->routeIs('transaksi.show') ? 'active' : '' }}">
+            <i class="bi bi-graph-up"></i> Laporan
+        </a>
+        
+        <div class="nav-label mt-3">Data Master</div>
         <a href="{{ route('kategori.index') }}" class="{{ request()->routeIs('kategori.*') ? 'active' : '' }}">
             <i class="bi bi-tags"></i> Kategori
         </a>

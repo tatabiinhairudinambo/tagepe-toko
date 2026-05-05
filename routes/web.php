@@ -35,4 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('kategori', KategoriController::class)->except(['show']);
     Route::resource('produk', ProdukController::class)->except(['show']);
     Route::resource('toko', TokoController::class)->only(['index', 'edit', 'update']);
+    
+    // Transaksi
+    Route::get('/transaksi', [\App\Http\Controllers\TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::post('/transaksi', [\App\Http\Controllers\TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/transaksi/laporan', [\App\Http\Controllers\TransaksiController::class, 'laporan'])->name('transaksi.laporan');
+    Route::get('/transaksi/{id}', [\App\Http\Controllers\TransaksiController::class, 'show'])->name('transaksi.show');
+    Route::get('/transaksi/{id}/struk', [\App\Http\Controllers\TransaksiController::class, 'struk'])->name('transaksi.struk');
 });

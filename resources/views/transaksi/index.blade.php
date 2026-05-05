@@ -1,0 +1,178 @@
+@extends('layout.app')
+@section('title', 'Kasir')
+@section('content')
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm" style="border-radius:14px">
+            <div class="card-body">
+                <h5 class="mb-3">Pilih Produk</h5>
+                <div class="row g-3" id="produk-list">
+                    @foreach($produks as $produk)
+                    <div class="col-md-4">
+                        <div class="card h-100 produk-item" style="cursor:pointer;border-radius:10px" 
+                             data-id="{{ $produk->id }}"
+                             data-nama="{{ $produk->nama }}"
+                             data-harga="{{ $produk->harga }}"
+                             data-stok="{{ $produk->stok }}">
+                            <div class="card-body text-center">
+                                @if($produk->foto)
+                                    @if(str_starts_with($produk->foto, 'http'))
+                                        <img src="{{ $produk->foto }}" class="img-fluid mb-2" style="height:80px;object-fit:cover;border-radius:8px">
+                                    @else
+                                        <img src="{{ asset('storage/' . $produk->foto) }}" class="img-fluid mb-2" style="height:80px;object-fit:cover;border-radius:8px">
+                                    @endif
+                                @endif
+                                <h6 class="mb-1">{{ $produk->nama }}</h6>
+                                <p class="text-muted small mb-1">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                                <span class="badge bg-info">Stok: {{ $produk->stok }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm" style="border-radius:14px;position:sticky;top:20px">
+            <div class="card-body">
+                <h5 class="mb-3">Keranjang</h5>
+                <form action="{{ route('transaksi.store') }}" method="POST" id="form-transaksi">
+                    @csrf
+                    <div id="cart-items" class="mb-3">
+                        <p class="text-muted text-center">Belum ada produk</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>Total:</strong>
+                        <strong id="total-harga">Rp 0</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bayar</label>
+                        <input type="number" name="bayar" id="bayar" class="form-control" required min="0" step="1000">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Kembalian</label>
+                        <input type="text" id="kembalian" class="form-control" readonly>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" id="btn-bayar" disabled>
+                        <i class="bi bi-check-lg me-1"></i> Bayar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let cart = [];
+let total = 0;
+
+// Tambah produk ke cart
+document.querySelectorAll('.produk-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const nama = this.dataset.nama;
+        const harga = parseFloat(this.dataset.harga);
+        const stok = parseInt(this.dataset.stok);
+        
+        // Cek apakah sudah ada di cart
+        const existing = cart.find(i => i.id == id);
+        if (existing) {
+            if (existing.jumlah < stok) {
+                existing.jumlah++;
+            } else {
+                alert('Stok tidak cukup!');
+                return;
+            }
+        } else {
+            cart.push({ id, nama, harga, jumlah: 1, stok });
+        }
+        
+        updateCart();
+    });
+});
+
+// Update tampilan cart
+function updateCart() {
+    const cartDiv = document.getElementById('cart-items');
+    
+    if (cart.length === 0) {
+        cartDiv.innerHTML = '<p class="text-muted text-center">Belum ada produk</p>';
+        document.getElementById('btn-bayar').disabled = true;
+        total = 0;
+    } else {
+        let html = '';
+        total = 0;
+        
+        cart.forEach((item, index) => {
+            const subtotal = item.harga * item.jumlah;
+            total += subtotal;
+            
+            html += `
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                    <div class="flex-grow-1">
+                        <small><strong>${item.nama}</strong></small><br>
+                        <small class="text-muted">Rp ${item.harga.toLocaleString('id-ID')} x ${item.jumlah}</small>
+                        <input type="hidden" name="items[${index}][produk_id]" value="${item.id}">
+                        <input type="hidden" name="items[${index}][jumlah]" value="${item.jumlah}">
+                    </div>
+                    <div class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary" onclick="updateJumlah(${index}, -1)">-</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="updateJumlah(${index}, 1)">+</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="removeItem(${index})">×</button>
+                        </div>
+                        <div><small><strong>Rp ${subtotal.toLocaleString('id-ID')}</strong></small></div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        cartDiv.innerHTML = html;
+        document.getElementById('btn-bayar').disabled = false;
+    }
+    
+    document.getElementById('total-harga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    hitungKembalian();
+}
+
+// Update jumlah
+function updateJumlah(index, delta) {
+    const item = cart[index];
+    const newJumlah = item.jumlah + delta;
+    
+    if (newJumlah <= 0) {
+        removeItem(index);
+    } else if (newJumlah <= item.stok) {
+        item.jumlah = newJumlah;
+        updateCart();
+    } else {
+        alert('Stok tidak cukup!');
+    }
+}
+
+// Hapus item
+function removeItem(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+// Hitung kembalian
+document.getElementById('bayar').addEventListener('input', hitungKembalian);
+
+function hitungKembalian() {
+    const bayar = parseFloat(document.getElementById('bayar').value) || 0;
+    const kembalian = bayar - total;
+    document.getElementById('kembalian').value = kembalian >= 0 ? 'Rp ' + kembalian.toLocaleString('id-ID') : 'Kurang bayar';
+}
+</script>
+
+@endsection
