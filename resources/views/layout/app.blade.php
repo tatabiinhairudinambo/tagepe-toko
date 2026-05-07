@@ -308,6 +308,107 @@
             border-color: var(--border-color) !important;
         }
         
+        /* ── Small Text ── */
+        [data-theme="dark"] .small,
+        [data-theme="dark"] small {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* ── List Group ── */
+        [data-theme="dark"] .list-group-item {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* ── Pagination ── */
+        [data-theme="dark"] .pagination .page-link {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .pagination .page-link:hover {
+            background: var(--bg-tertiary) !important;
+        }
+        [data-theme="dark"] .pagination .page-item.active .page-link {
+            background: #3498db !important;
+            border-color: #3498db !important;
+        }
+        
+        /* ── Breadcrumb ── */
+        [data-theme="dark"] .breadcrumb {
+            background: var(--bg-tertiary) !important;
+        }
+        [data-theme="dark"] .breadcrumb-item,
+        [data-theme="dark"] .breadcrumb-item a {
+            color: var(--text-secondary) !important;
+        }
+        [data-theme="dark"] .breadcrumb-item.active {
+            color: var(--text-primary) !important;
+        }
+        
+        /* ── Progress Bar ── */
+        [data-theme="dark"] .progress {
+            background: var(--bg-tertiary) !important;
+        }
+        
+        /* ── Nav Tabs ── */
+        [data-theme="dark"] .nav-tabs {
+            border-color: var(--border-color) !important;
+        }
+        [data-theme="dark"] .nav-tabs .nav-link {
+            color: var(--text-secondary) !important;
+            border-color: transparent !important;
+        }
+        [data-theme="dark"] .nav-tabs .nav-link:hover {
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .nav-tabs .nav-link.active {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) var(--border-color) var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* ── Accordion ── */
+        [data-theme="dark"] .accordion-item {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        [data-theme="dark"] .accordion-button {
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .accordion-button:not(.collapsed) {
+            background: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .accordion-body {
+            background: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* ── Toast ── */
+        [data-theme="dark"] .toast {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .toast-header {
+            background: var(--bg-tertiary) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* ── Offcanvas ── */
+        [data-theme="dark"] .offcanvas {
+            background: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .offcanvas-header {
+            border-color: var(--border-color) !important;
+        }
+        
         /* ── Dark Mode Toggle ── */
         .theme-toggle {
             background: rgba(255,255,255,.1);
