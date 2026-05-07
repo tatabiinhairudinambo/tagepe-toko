@@ -122,22 +122,43 @@
             margin-top: 15px;
             padding-top: 10px;
             border-top: 2px solid #ddd;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
         }
         .btn {
             display: inline-block;
-            padding: 8px 15px;
-            margin: 3px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 13px;
             font-family: Arial, sans-serif;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
         .btn-primary { background: #007bff; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
         .btn-info { background: #17a2b8; color: white; }
-        .btn:hover { opacity: 0.8; }
+        .btn-bluetooth { background: #6f42c1; color: white; }
+        .btn:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 600px) {
+            .btn-container {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -220,10 +241,18 @@
     
     <!-- Buttons (No Print) -->
     <div class="btn-container no-print">
-        <button onclick="window.print()" class="btn btn-primary">🖨️ Print Browser</button>
-        <button onclick="printBluetooth()" class="btn btn-primary" style="background:#6f42c1">📱 Print Bluetooth</button>
-        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">🛒 Transaksi Baru</a>
-        <a href="{{ route('transaksi.laporan') }}" class="btn btn-info">📊 Laporan</a>
+        <button onclick="window.print()" class="btn btn-primary">
+            🖨️ Print Browser
+        </button>
+        <button onclick="printBluetooth()" class="btn btn-bluetooth">
+            📱 Print Bluetooth
+        </button>
+        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">
+            🛒 Transaksi Baru
+        </a>
+        <a href="{{ route('transaksi.laporan') }}" class="btn btn-info">
+            📊 Laporan
+        </a>
     </div>
     
     <script>
