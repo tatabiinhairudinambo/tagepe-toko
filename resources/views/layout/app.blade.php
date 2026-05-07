@@ -200,6 +200,12 @@
             background: var(--bg-secondary) !important;
             color: var(--text-primary) !important;
         }
+        [data-theme="dark"] .invalid-feedback {
+            color: #ffa8b3 !important;
+        }
+        [data-theme="dark"] .valid-feedback {
+            color: #8fec9f !important;
+        }
         
         /* ── Tables ── */
         .table {
@@ -360,6 +366,45 @@
         [data-theme="dark"] .badge:not(.bg-primary):not(.bg-success):not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-dark) {
             background: #6c757d !important;
             color: #ffffff !important;
+        }
+        
+        /* Badge Kategori - custom inline badge */
+        .badge-kategori {
+            background: #e8f4fd;
+            color: #2980b9;
+            font-size: .78rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        [data-theme="dark"] .badge-kategori {
+            background: #6c757d !important;
+            color: #ffffff !important;
+        }
+        
+        /* Fix inline style backgrounds in dark mode */
+        [data-theme="dark"] [style*="background:#e8f4fd"],
+        [data-theme="dark"] [style*="background:#fef3e8"],
+        [data-theme="dark"] [style*="background:#f0f4f8"],
+        [data-theme="dark"] [style*="background:#f8fafc"],
+        [data-theme="dark"] [style*="background:#f8f9fa"],
+        [data-theme="dark"] [style*="background:#e8f8f5"],
+        [data-theme="dark"] [style*="background:#e8edf2"],
+        [data-theme="dark"] [style*="background:#fff3f3"] {
+            background: var(--bg-tertiary) !important;
+        }
+        
+        /* Fix inline style colors in dark mode */
+        [data-theme="dark"] [style*="color:#667eea"],
+        [data-theme="dark"] [style*="color:#2980b9"] {
+            color: #5dade2 !important;
+        }
+        [data-theme="dark"] [style*="color:#3498db"] {
+            color: #5dade2 !important;
+        }
+        [data-theme="dark"] [style*="color:#e74c3c"] {
+            color: #ffa8b3 !important;
         }
         
         /* ── Alerts ── */
@@ -587,6 +632,7 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             color: rgba(255,255,255,.7);
             font-size: 0.85rem;

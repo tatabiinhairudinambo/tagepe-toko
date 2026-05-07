@@ -190,7 +190,7 @@
                         </div>
                     </td>
                     <td class="py-3 align-middle">
-                        <span style="background:#e8f4fd;color:#2980b9;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:50px">
+                        <span class="badge-kategori">
                             {{ $p->kategori->nama ?? '-' }}
                         </span>
                     </td>
