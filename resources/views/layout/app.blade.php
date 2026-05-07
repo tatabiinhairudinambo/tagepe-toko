@@ -235,11 +235,26 @@
         }
         
         /* ── Text Colors ── */
-        .text-muted {
-            color: var(--text-muted) !important;
+        [data-theme="dark"] .text-muted {
+            color: #cccccc !important;
         }
-        .text-secondary {
-            color: var(--text-secondary) !important;
+        [data-theme="dark"] .text-secondary {
+            color: #cccccc !important;
+        }
+        [data-theme="dark"] .text-primary {
+            color: #5dade2 !important;
+        }
+        [data-theme="dark"] .text-success {
+            color: #8fec9f !important;
+        }
+        [data-theme="dark"] .text-danger {
+            color: #ffa8b3 !important;
+        }
+        [data-theme="dark"] .text-warning {
+            color: #ffe066 !important;
+        }
+        [data-theme="dark"] .text-info {
+            color: #7de9f7 !important;
         }
         [data-theme="dark"] h1, 
         [data-theme="dark"] h2, 
@@ -250,21 +265,21 @@
             color: #ffffff !important;
         }
         [data-theme="dark"] p,
-        [data-theme="dark"] span,
+        [data-theme="dark"] span:not(.badge),
         [data-theme="dark"] div,
         [data-theme="dark"] td,
         [data-theme="dark"] th,
         [data-theme="dark"] label {
-            color: var(--text-primary) !important;
+            color: #ffffff !important;
         }
         [data-theme="dark"] strong,
         [data-theme="dark"] b {
             color: #ffffff !important;
         }
-        [data-theme="dark"] a {
+        [data-theme="dark"] a:not(.btn) {
             color: #5dade2 !important;
         }
-        [data-theme="dark"] a:hover {
+        [data-theme="dark"] a:not(.btn):hover {
             color: #85c1e9 !important;
         }
         [data-theme="dark"] .fw-semibold,
@@ -275,6 +290,10 @@
             color: #ffffff !important;
         }
         [data-theme="dark"] .topbar-title {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .small,
+        [data-theme="dark"] small {
             color: #ffffff !important;
         }
         
@@ -298,12 +317,26 @@
         [data-theme="dark"] .text-body {
             color: #ffffff !important;
         }
+        [data-theme="dark"] .text-white {
+            color: #ffffff !important;
+        }
         [data-theme="dark"] .display-1,
         [data-theme="dark"] .display-2,
         [data-theme="dark"] .display-3,
         [data-theme="dark"] .display-4,
         [data-theme="dark"] .display-5,
         [data-theme="dark"] .display-6 {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .fs-1,
+        [data-theme="dark"] .fs-2,
+        [data-theme="dark"] .fs-3,
+        [data-theme="dark"] .fs-4,
+        [data-theme="dark"] .fs-5,
+        [data-theme="dark"] .fs-6 {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .lead {
             color: #ffffff !important;
         }
         
@@ -318,6 +351,9 @@
         }
         [data-theme="dark"] .badge.bg-secondary {
             background: #6c757d !important;
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .badge {
             color: #ffffff !important;
         }
         
