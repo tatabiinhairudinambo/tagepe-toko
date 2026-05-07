@@ -28,19 +28,19 @@
         
         /* Dark Mode Colors */
         [data-theme="dark"] {
-            --bg-primary: #1a1d23;
-            --bg-secondary: #25282e;
-            --bg-tertiary: #2d3139;
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d30;
+            --bg-tertiary: #3e3e42;
             --text-primary: #e4e6eb;
             --text-secondary: #b0b3b8;
             --text-muted: #8a8d93;
-            --border-color: #3a3d44;
-            --card-shadow: 0 1px 8px rgba(0,0,0,.3);
-            --sidebar-bg: linear-gradient(180deg, #0f1419 0%, #1a1d23 100%);
-            --input-bg: #2d3139;
-            --input-border: #3a3d44;
-            --table-stripe: #2d3139;
-            --table-hover: #33363e;
+            --border-color: #3e3e42;
+            --card-shadow: 0 2px 12px rgba(0,0,0,.4);
+            --sidebar-bg: linear-gradient(180deg, #1e1e1e 0%, #252526 100%);
+            --input-bg: #3e3e42;
+            --input-border: #4e4e52;
+            --table-stripe: #3e3e42;
+            --table-hover: #4e4e52;
         }
         
         body { 
@@ -167,7 +167,7 @@
             color: var(--text-primary) !important;
         }
         .card-header {
-            background: var(--bg-tertiary) !important;
+            background: var(--bg-secondary) !important;
             border-color: var(--border-color) !important;
             color: var(--text-primary) !important;
         }
@@ -201,22 +201,31 @@
             border-color: var(--border-color) !important;
         }
         .table thead {
-            background: var(--bg-tertiary) !important;
+            background: var(--bg-secondary) !important;
             color: var(--text-primary) !important;
+            border-color: var(--border-color) !important;
         }
         .table tbody tr {
             background: var(--bg-secondary) !important;
             border-color: var(--border-color) !important;
         }
         .table-striped tbody tr:nth-of-type(odd) {
-            background: var(--table-stripe) !important;
+            background: var(--bg-secondary) !important;
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background: var(--bg-secondary) !important;
         }
         .table-hover tbody tr:hover {
             background: var(--table-hover) !important;
         }
         .table-light {
-            background: var(--bg-tertiary) !important;
+            background: var(--bg-secondary) !important;
             color: var(--text-primary) !important;
+            border-color: var(--border-color) !important;
+        }
+        [data-theme="dark"] .table > :not(caption) > * > * {
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
         }
         
         /* ── Text Colors ── */
@@ -229,29 +238,29 @@
         
         /* ── Alerts ── */
         [data-theme="dark"] .alert-success {
-            background: rgba(40, 167, 69, 0.15) !important;
-            border-color: rgba(40, 167, 69, 0.3) !important;
-            color: #5cd67c !important;
+            background: rgba(40, 167, 69, 0.2) !important;
+            border-color: rgba(40, 167, 69, 0.4) !important;
+            color: #6fd88e !important;
         }
         [data-theme="dark"] .alert-danger {
-            background: rgba(220, 53, 69, 0.15) !important;
-            border-color: rgba(220, 53, 69, 0.3) !important;
-            color: #f56c7a !important;
+            background: rgba(220, 53, 69, 0.2) !important;
+            border-color: rgba(220, 53, 69, 0.4) !important;
+            color: #f78a96 !important;
         }
         [data-theme="dark"] .alert-warning {
-            background: rgba(255, 193, 7, 0.15) !important;
-            border-color: rgba(255, 193, 7, 0.3) !important;
-            color: #ffc107 !important;
+            background: rgba(255, 193, 7, 0.2) !important;
+            border-color: rgba(255, 193, 7, 0.4) !important;
+            color: #ffd454 !important;
         }
         [data-theme="dark"] .alert-info {
-            background: rgba(13, 202, 240, 0.15) !important;
-            border-color: rgba(13, 202, 240, 0.3) !important;
-            color: #3dd5f3 !important;
+            background: rgba(13, 202, 240, 0.2) !important;
+            border-color: rgba(13, 202, 240, 0.4) !important;
+            color: #5de0f5 !important;
         }
         
         /* ── Badges ── */
         [data-theme="dark"] .badge {
-            filter: brightness(1.2);
+            filter: brightness(1.3) saturate(1.1);
         }
         
         /* ── Buttons ── */
@@ -261,12 +270,20 @@
             color: var(--text-primary) !important;
         }
         [data-theme="dark"] .btn-outline-secondary {
-            color: var(--text-secondary) !important;
+            color: var(--text-primary) !important;
             border-color: var(--border-color) !important;
         }
         [data-theme="dark"] .btn-outline-secondary:hover {
             background: var(--bg-tertiary) !important;
             color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] .btn-outline-info {
+            color: #5de0f5 !important;
+            border-color: #5de0f5 !important;
+        }
+        [data-theme="dark"] .btn-outline-info:hover {
+            background: rgba(13, 202, 240, 0.2) !important;
+            color: #5de0f5 !important;
         }
         
         /* ── Dropdown ── */
@@ -337,7 +354,7 @@
         
         /* ── Breadcrumb ── */
         [data-theme="dark"] .breadcrumb {
-            background: var(--bg-tertiary) !important;
+            background: var(--bg-secondary) !important;
         }
         [data-theme="dark"] .breadcrumb-item,
         [data-theme="dark"] .breadcrumb-item a {
@@ -359,10 +376,12 @@
         [data-theme="dark"] .nav-tabs .nav-link {
             color: var(--text-secondary) !important;
             border-color: transparent !important;
+            background: transparent !important;
         }
         [data-theme="dark"] .nav-tabs .nav-link:hover {
             border-color: var(--border-color) !important;
             color: var(--text-primary) !important;
+            background: var(--bg-tertiary) !important;
         }
         [data-theme="dark"] .nav-tabs .nav-link.active {
             background: var(--bg-secondary) !important;
@@ -376,7 +395,7 @@
             border-color: var(--border-color) !important;
         }
         [data-theme="dark"] .accordion-button {
-            background: var(--bg-tertiary) !important;
+            background: var(--bg-secondary) !important;
             color: var(--text-primary) !important;
         }
         [data-theme="dark"] .accordion-button:not(.collapsed) {
