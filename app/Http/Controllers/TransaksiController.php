@@ -196,9 +196,13 @@ class TransaksiController extends Controller
                   ->orWhereHas('cabang', fn($c) => $c->where('nama_cabang', 'like', "%$search%"));
             });
         }
+        if ($request->cabang_id) {
+            $query->where('cabang_id', $request->cabang_id);
+        }
 
         $transaksis = $query->latest()->paginate(20);
         $total_pendapatan = $query->sum('total');
+        $cabangs = \App\Models\Cabang::all();
 
         // Data grafik: pendapatan per hari (30 hari terakhir)
         $grafikQuery = Transaksi::select(
@@ -223,7 +227,7 @@ class TransaksiController extends Controller
         $grafikPendapatan = $grafikData->pluck('total_hari')->toArray();
         $grafikJumlah = $grafikData->pluck('jumlah_transaksi')->toArray();
 
-        return view('transaksi.laporan', compact('transaksis', 'total_pendapatan', 'grafikLabels', 'grafikPendapatan', 'grafikJumlah'));
+        return view('transaksi.laporan', compact('transaksis', 'total_pendapatan', 'grafikLabels', 'grafikPendapatan', 'grafikJumlah', 'cabangs'));
     }
 
     // Detail transaksi

@@ -117,6 +117,45 @@
 
         /* ── Cards ── */
         .card { border-radius: 12px !important; }
+
+        /* ── Mobile Responsive ── */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,.5);
+            z-index: 99;
+        }
+        .btn-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #1a2535;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        @media (max-width: 768px) {
+            :root { --sidebar-w: 0px; }
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform .25s ease;
+                z-index: 100;
+                width: 240px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.open { display: block; }
+            .main-wrapper { margin-left: 0; }
+            .btn-hamburger { display: inline-block; }
+            .main-content { padding: 16px; }
+            .topbar { padding: 12px 16px; }
+            .topbar-title { font-size: .95rem; }
+            .display-6 { font-size: 1.5rem !important; }
+        }
     </style>
 </head>
 <body>
@@ -148,6 +187,13 @@
         </a>
         <a href="{{ route('pemesanan.index') }}" class="{{ request()->routeIs('pemesanan.*') ? 'active' : '' }}">
             <i class="bi bi-receipt"></i> Pemesanan
+        </a>
+        <a href="{{ route('order.kasir.index') }}" class="{{ request()->routeIs('order.kasir.*') ? 'active' : '' }}">
+            <i class="bi bi-bag-check"></i> Order Customer
+            @php $orderMenunggu = \App\Models\OrderPublik::where('status','menunggu')->count(); @endphp
+            @if($orderMenunggu > 0)
+                <span class="badge bg-warning text-dark ms-auto">{{ $orderMenunggu }}</span>
+            @endif
         </a>
         <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') ? 'active' : '' }}">
             <i class="bi bi-box-seam"></i> Produk
@@ -194,6 +240,10 @@
         </div>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
+            <a href="{{ route('profile.edit') }}" class="btn btn-sm w-100 mb-2"
+               style="background:rgba(52,152,219,.15);color:#3498db;border:1px solid rgba(52,152,219,.2);border-radius:8px">
+                <i class="bi bi-key me-1"></i> Ganti Password
+            </a>
             <button type="submit" class="btn btn-sm w-100"
                     style="background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.2);border-radius:8px">
                 <i class="bi bi-box-arrow-left me-1"></i> Logout
@@ -202,10 +252,18 @@
     </div>
 </aside>
 
+{{-- Sidebar overlay untuk mobile --}}
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 {{-- Main --}}
 <div class="main-wrapper">
     <div class="topbar">
-        <span class="topbar-title">@yield('title', 'Dashboard')</span>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn-hamburger" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="topbar-title">@yield('title', 'Dashboard')</span>
+        </div>
         <div class="d-flex align-items-center gap-3">
             {{-- Notifikasi stok menipis --}}
             @php
@@ -298,6 +356,22 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+}
+// Tutup sidebar saat klik link di mobile
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) closeSidebar();
+    });
+});
+</script>
 @stack('scripts')
 </body>
 </html>

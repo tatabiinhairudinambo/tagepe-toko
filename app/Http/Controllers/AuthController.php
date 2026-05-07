@@ -35,6 +35,12 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             \Illuminate\Support\Facades\RateLimiter::clear($key);
             $request->session()->regenerate();
+            // Log login
+            \App\Models\LoginLog::create([
+                'user_id'    => Auth::id(),
+                'aksi'       => 'login',
+                'ip_address' => $request->ip(),
+            ]);
             return redirect()->route('dashboard');
         }
 
@@ -45,6 +51,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // Log logout
+        \App\Models\LoginLog::create([
+            'user_id'    => Auth::id(),
+            'aksi'       => 'logout',
+            'ip_address' => $request->ip(),
+        ]);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

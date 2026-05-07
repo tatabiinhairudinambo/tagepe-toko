@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Route;
 // Halaman publik - katalog produk (tanpa login)
 Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog');
 
+// Order publik (tanpa login)
+Route::get('/order', [\App\Http\Controllers\OrderPublikController::class, 'index'])->name('order.index');
+Route::get('/order/cari', [\App\Http\Controllers\OrderPublikController::class, 'cari'])->name('order.cari');
+Route::post('/order', [\App\Http\Controllers\OrderPublikController::class, 'store'])->name('order.store');
+Route::get('/order/sukses/{kode}', [\App\Http\Controllers\OrderPublikController::class, 'sukses'])->name('order.sukses');
+Route::get('/order/cek', [\App\Http\Controllers\OrderPublikController::class, 'cekStatus'])->name('order.cek');
+
 // Test upload
 Route::get('/test-upload', function() { return view('test-upload'); });
 Route::post('/test-upload', function(\Illuminate\Http\Request $request) {
@@ -32,6 +39,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // Kasir (semua user bisa akses)
     Route::get('/transaksi', [\App\Http\Controllers\TransaksiController::class, 'index'])->name('transaksi.index');
@@ -69,4 +79,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/pemesanan/{pemesanan}/bayar', [\App\Http\Controllers\PemesananController::class, 'bayar'])->name('pemesanan.bayar');
     Route::patch('/pemesanan/{pemesanan}/batal', [\App\Http\Controllers\PemesananController::class, 'batal'])->name('pemesanan.batal');
     Route::get('/pemesanan/{pemesanan}/nota', [\App\Http\Controllers\PemesananController::class, 'nota'])->name('pemesanan.nota');
+
+    // Order dari customer (kasir kelola)
+    Route::get('/order-kasir', [\App\Http\Controllers\OrderKasirController::class, 'index'])->name('order.kasir.index');
+    Route::patch('/order-kasir/{order}/proses', [\App\Http\Controllers\OrderKasirController::class, 'proses'])->name('order.kasir.proses');
+    Route::patch('/order-kasir/{order}/selesai', [\App\Http\Controllers\OrderKasirController::class, 'selesai'])->name('order.kasir.selesai');
+    Route::patch('/order-kasir/{order}/batal', [\App\Http\Controllers\OrderKasirController::class, 'batal'])->name('order.kasir.batal');
 });

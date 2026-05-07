@@ -61,6 +61,10 @@ class DashboardController extends Controller
             'produkPending'    => $user->role === 'admin'
                 ? Produk::with(['kategori', 'dibuatOleh'])->where('status', 'pending')->get()
                 : collect(),
+            // Riwayat login hari ini (admin only)
+            'loginLogs'        => $user->role === 'admin'
+                ? \App\Models\LoginLog::with('user')->whereDate('created_at', today())->latest()->get()
+                : collect(),
         ]);
     }
 }

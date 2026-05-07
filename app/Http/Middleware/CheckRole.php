@@ -11,7 +11,7 @@ class CheckRole
     public function handle(Request $request, Closure $next, string $role)
     {
         if (!Auth::check() || Auth::user()->role !== $role) {
-            abort(403, 'Akses ditolak. Halaman ini khusus ' . $role . '.');
+            return redirect()->route('dashboard');
         }
 
         return $next($request);

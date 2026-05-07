@@ -20,7 +20,7 @@
     <div class="row g-2">
         @foreach($stokMenipisAlert->groupBy('cabang_id') as $cabangId => $items)
         <div class="col-md-4">
-            <div class="p-2 rounded" style="background:rgba(0,0,0,.2)">
+            <div class="p-2 rounded text-center" style="background:rgba(0,0,0,.2)">
                 <div class="small fw-bold mb-1">{{ $items->first()->cabang->nama_cabang ?? 'Tanpa Cabang' }}</div>
                 @foreach($items->take(3) as $item)
                 <div class="d-flex justify-content-between small">
@@ -29,7 +29,7 @@
                 </div>
                 @endforeach
                 @if($items->count() > 3)
-                <div class="small opacity-75">+{{ $items->count()-3 }} lainnya</div>
+                <div class="small opacity-75 text-center">+{{ $items->count()-3 }} lainnya</div>
                 @endif
             </div>
         </div>
@@ -278,6 +278,39 @@
         </table>
         @else
         <p class="text-muted text-center mb-0">Belum ada aktivitas kasir hari ini</p>
+        @endif
+    </div>
+</div>
+
+{{-- Riwayat Login/Logout Hari Ini --}}
+<div class="card border-0 shadow-sm mb-4" style="border-radius:14px">
+    <div class="card-body">
+        <h6 class="fw-bold mb-3"><i class="bi bi-person-check text-success me-2"></i>Riwayat Login/Logout Hari Ini</h6>
+        @if($loginLogs->count() > 0)
+        <table class="table table-sm mb-0">
+            <thead class="table-light">
+                <tr><th>Waktu</th><th>User</th><th>Role</th><th>Aksi</th><th>IP</th></tr>
+            </thead>
+            <tbody>
+                @foreach($loginLogs as $log)
+                <tr>
+                    <td class="small">{{ $log->created_at->format('H:i') }}</td>
+                    <td>{{ $log->user->name ?? '-' }}</td>
+                    <td><span class="badge {{ $log->user->role === 'admin' ? 'bg-danger' : 'bg-info' }}">{{ $log->user->role ?? '-' }}</span></td>
+                    <td>
+                        @if($log->aksi === 'login')
+                            <span class="badge bg-success">Login</span>
+                        @else
+                            <span class="badge bg-secondary">Logout</span>
+                        @endif
+                    </td>
+                    <td class="small text-muted">{{ $log->ip_address }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @else
+        <p class="text-muted text-center mb-0">Belum ada aktivitas login hari ini</p>
         @endif
     </div>
 </div>

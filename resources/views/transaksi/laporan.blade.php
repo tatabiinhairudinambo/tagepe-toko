@@ -25,7 +25,18 @@
                 <label class="form-label">Cari</label>
                 <input type="text" name="search" class="form-control" placeholder="Kode / kasir / cabang..." value="{{ request('search') }}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <label class="form-label">Cabang</label>
+                <select name="cabang_id" class="form-select">
+                    <option value="">Semua Cabang</option>
+                    @foreach($cabangs as $c)
+                        <option value="{{ $c->id }}" {{ request('cabang_id') == $c->id ? 'selected' : '' }}>
+                            {{ $c->nama_cabang }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
                 <label class="form-label">Dari Tanggal</label>
                 <input type="date" name="tanggal_dari" class="form-control" value="{{ request('tanggal_dari') }}">
             </div>
