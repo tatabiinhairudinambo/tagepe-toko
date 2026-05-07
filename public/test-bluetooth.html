@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bluetooth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; margin-bottom: 20px; }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .btn-test { background: #28a745; }
+        .btn-test:hover { background: #218838; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔵 Test Bluetooth SDK</h1>
+        
+        <div id="results"></div>
+        
+        <button onclick="checkBluetooth()">🔍 Cek Bluetooth Support</button>
+        <button onclick="testBluetoothScan()" class="btn-test">📱 Test Scan Bluetooth</button>
+        <button onclick="location.reload()">🔄 Refresh</button>
+        
+        <div style="margin-top: 20px;">
+            <h3>Info Browser:</h3>
+            <pre id="browserInfo"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Display browser info
+        document.getElementById('browserInfo').textContent = 
+            'User Agent: ' + navigator.userAgent + '\n' +
+            'Platform: ' + navigator.platform + '\n' +
+            'Language: ' + navigator.language;
+
+        function showResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = 'status ' + type;
+            div.innerHTML = message;
+            document.getElementById('results').appendChild(div);
+        }
+
+        function checkBluetooth() {
+            document.getElementById('results').innerHTML = '';
+            
+            showResult('🔍 Memeriksa Bluetooth SDK...', 'info');
+            
+            // Check Web Bluetooth API
+            if (!navigator.bluetooth) {
+                showResult('❌ Web Bluetooth API TIDAK TERSEDIA<br><br>' +
+                    '<strong>Solusi:</strong><br>' +
+                    '1. Gunakan browser Chrome, Edge, atau Opera<br>' +
+                    '2. Pastikan menggunakan HTTPS atau localhost<br>' +
+                    '3. Update browser ke versi terbaru<br>' +
+                    '4. Di Chrome, buka chrome://flags dan aktifkan "Experimental Web Platform features"', 
+                    'error');
+                return;
+            }
+            
+            showResult('✅ Web Bluetooth API TERSEDIA!', 'success');
+            
+            // Check HTTPS
+            if (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                showResult('✅ Protocol: ' + location.protocol + ' (OK)', 'success');
+            } else {
+                showResult('⚠️ Protocol: ' + location.protocol + ' (Harus HTTPS atau localhost)', 'error');
+            }
+            
+            // Check Bluetooth availability
+            navigator.bluetooth.getAvailability().then(available => {
+                if (available) {
+                    showResult('✅ Bluetooth adapter TERSEDIA di perangkat ini', 'success');
+                } else {
+                    showResult('❌ Bluetooth adapter TIDAK DITEMUKAN<br>' +
+                        'Pastikan Bluetooth di komputer/HP sudah ON', 'error');
+                }
+            }).catch(err => {
+                showResult('⚠️ Tidak bisa cek Bluetooth adapter: ' + err.message, 'error');
+            });
+            
+            showResult('✅ Semua pengecekan selesai! Klik "Test Scan Bluetooth" untuk coba scan printer.', 'info');
+        }
+
+        async function testBluetoothScan() {
+            document.getElementById('results').innerHTML = '';
+            
+            try {
+                showResult('🔍 Mencari perangkat Bluetooth...', 'info');
+                
+                // Request any Bluetooth device
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [
+                        '000018f0-0000-1000-8000-00805f9b34fb', // Printer service
+                        'battery_service',
+                        'device_information'
+                    ]
+                });
+                
+                showResult('✅ Perangkat ditemukan!<br>' +
+                    '<strong>Nama:</strong> ' + device.name + '<br>' +
+                    '<strong>ID:</strong> ' + device.id, 'success');
+                
+                // Add disconnect handler
+                device.addEventListener('gattserverdisconnected', () => {
+                    showResult('⚠️ Perangkat terputus', 'error');
+                });
+                
+                // Try to connect with retry
+                showResult('🔗 Mencoba koneksi ke ' + device.name + '...', 'info');
+                
+                if (!device.gatt.connected) {
+                    const server = await device.gatt.connect();
+                    showResult('✅ Berhasil terkoneksi!', 'success');
+                    
+                    // Wait a bit for connection to stabilize
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Check if still connected
+                    if (server.connected) {
+                        // Get services
+                        const services = await server.getPrimaryServices();
+                        showResult('📋 Services tersedia: ' + services.length, 'info');
+                        
+                        for (let i = 0; i < services.length; i++) {
+                            const service = services[i];
+                            showResult('Service ' + (i+1) + ': ' + service.uuid, 'info');
+                            
+                            try {
+                                const characteristics = await service.getCharacteristics();
+                                showResult('  └─ Characteristics: ' + characteristics.length, 'info');
+                            } catch (e) {
+                                showResult('  └─ Tidak bisa baca characteristics', 'error');
+                            }
+                        }
+                        
+                        // Disconnect
+                        device.gatt.disconnect();
+                        showResult('✅ Test selesai! Bluetooth SDK berfungsi dengan baik.', 'success');
+                    } else {
+                        showResult('❌ Koneksi terputus sebelum selesai', 'error');
+                    }
+                } else {
+                    showResult('✅ Sudah terkoneksi sebelumnya', 'success');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                
+                if (error.name === 'NotFoundError') {
+                    showResult('❌ Tidak ada perangkat dipilih atau tidak ditemukan', 'error');
+                } else if (error.name === 'SecurityError') {
+                    showResult('❌ Akses Bluetooth ditolak (Security Error)<br>' +
+                        'Pastikan menggunakan HTTPS atau localhost', 'error');
+                } else if (error.name === 'NotSupportedError') {
+                    showResult('❌ Bluetooth tidak didukung di browser ini', 'error');
+                } else if (error.name === 'NetworkError') {
+                    showResult('❌ Network Error: Koneksi Bluetooth gagal<br>' +
+                        '<strong>Solusi:</strong><br>' +
+                        '1. Pastikan printer Bluetooth sudah ON<br>' +
+                        '2. Pastikan printer dalam jarak dekat (< 10 meter)<br>' +
+                        '3. Coba matikan dan nyalakan ulang printer<br>' +
+                        '4. Coba unpair dan pair ulang printer di Windows', 'error');
+                } else {
+                    showResult('❌ Error: ' + error.name + '<br>' + error.message, 'error');
+                }
+            }
+        }
+
+        // Auto check on load
+        window.onload = function() {
+            showResult('👋 Selamat datang! Klik tombol "Cek Bluetooth Support" untuk mulai.', 'info');
+        };
+    </script>
+</body>
+</html>

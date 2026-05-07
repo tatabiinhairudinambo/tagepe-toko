@@ -122,43 +122,22 @@
             margin-top: 15px;
             padding-top: 10px;
             border-top: 2px solid #ddd;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
         }
         .btn {
             display: inline-block;
-            padding: 10px 16px;
+            padding: 8px 15px;
+            margin: 3px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             font-family: Arial, sans-serif;
-            transition: all 0.2s;
-            white-space: nowrap;
         }
         .btn-primary { background: #007bff; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
         .btn-info { background: #17a2b8; color: white; }
-        .btn-bluetooth { background: #6f42c1; color: white; }
-        .btn:hover { 
-            opacity: 0.9; 
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        @media (max-width: 600px) {
-            .btn-container {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
+        .btn:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -241,18 +220,10 @@
     
     <!-- Buttons (No Print) -->
     <div class="btn-container no-print">
-        <button onclick="window.print()" class="btn btn-primary">
-            🖨️ Print Browser
-        </button>
-        <button onclick="printBluetooth()" class="btn btn-bluetooth">
-            📱 Print Bluetooth
-        </button>
-        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">
-            🛒 Transaksi Baru
-        </a>
-        <a href="{{ route('transaksi.laporan') }}" class="btn btn-info">
-            📊 Laporan
-        </a>
+        <button onclick="window.print()" class="btn btn-primary">🖨️ Print Browser</button>
+        <button onclick="printBluetooth()" class="btn btn-primary" style="background:#6f42c1">📱 Print Bluetooth</button>
+        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">🛒 Transaksi Baru</a>
+        <a href="{{ route('transaksi.laporan') }}" class="btn btn-info">📊 Laporan</a>
     </div>
     
     <script>
@@ -394,27 +365,54 @@
                     return;
                 }
                 
-                // Request Bluetooth device
+                // Request Bluetooth device - use acceptAllDevices for better compatibility
                 const device = await navigator.bluetooth.requestDevice({
-                    filters: [
-                        { services: ['000018f0-0000-1000-8000-00805f9b34fb'] }, // Printer service
-                    ],
-                    optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
+                    acceptAllDevices: true,
+                    optionalServices: [
+                        '000018f0-0000-1000-8000-00805f9b34fb', // Printer service
+                        '49535343-fe7d-4ae5-8fa9-9fafd205e455', // Alternative printer service
+                    ]
                 });
                 
-                console.log('Connecting to', device.name);
+                console.log('Device selected:', device.name);
+                
+                // Add disconnect handler
+                device.addEventListener('gattserverdisconnected', () => {
+                    console.log('Device disconnected');
+                });
                 
                 // Connect to GATT server
+                console.log('Connecting to GATT server...');
                 const server = await device.gatt.connect();
                 console.log('Connected to GATT server');
                 
-                // Get printer service
-                const service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-                console.log('Got service');
+                // Wait for connection to stabilize
+                await new Promise(resolve => setTimeout(resolve, 500));
                 
-                // Get write characteristic
-                const characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
-                console.log('Got characteristic');
+                // Check if still connected
+                if (!server.connected) {
+                    throw new Error('Connection lost immediately after connecting');
+                }
+                
+                // Try to find printer service
+                let service, characteristic;
+                
+                // Try first service UUID
+                try {
+                    service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+                    characteristic = await service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb');
+                    console.log('Using standard printer service');
+                } catch (e) {
+                    console.log('Standard service not found, trying alternative...');
+                    // Try alternative service
+                    try {
+                        service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
+                        characteristic = await service.getCharacteristic('49535343-8841-43f4-a8d4-ecbe34729bb3');
+                        console.log('Using alternative printer service');
+                    } catch (e2) {
+                        throw new Error('Printer service not found. Pastikan ini printer thermal yang support ESC/POS.');
+                    }
+                }
                 
                 // Generate receipt
                 const receipt = generateReceipt();
@@ -423,19 +421,24 @@
                 const encoder = new TextEncoder();
                 const data = encoder.encode(receipt);
                 
+                console.log('Sending', data.length, 'bytes...');
+                
                 // Send data in chunks (max 512 bytes per write)
                 const chunkSize = 512;
                 for (let i = 0; i < data.length; i += chunkSize) {
                     const chunk = data.slice(i, i + chunkSize);
                     await characteristic.writeValue(chunk);
                     await new Promise(resolve => setTimeout(resolve, 100)); // Delay between chunks
+                    console.log('Sent chunk', Math.floor(i/chunkSize) + 1);
                 }
                 
                 console.log('Print sent successfully');
                 alert('✅ Struk berhasil dicetak via Bluetooth!');
                 
-                // Disconnect
-                device.gatt.disconnect();
+                // Disconnect after a delay
+                setTimeout(() => {
+                    device.gatt.disconnect();
+                }, 1000);
                 
             } catch (error) {
                 console.error('Bluetooth print error:', error);
@@ -444,6 +447,8 @@
                     alert('❌ Printer Bluetooth tidak ditemukan.\n\nPastikan printer sudah ON dan dalam mode pairing.');
                 } else if (error.name === 'SecurityError') {
                     alert('❌ Akses Bluetooth ditolak.\n\nPastikan menggunakan HTTPS atau localhost.');
+                } else if (error.name === 'NetworkError') {
+                    alert('❌ Koneksi Bluetooth gagal.\n\nSolusi:\n1. Pastikan printer sudah ON\n2. Pastikan jarak dekat (< 10m)\n3. Coba restart printer\n4. Coba unpair dan pair ulang di Windows');
                 } else {
                     alert('❌ Gagal cetak via Bluetooth:\n' + error.message + '\n\nCoba pakai Print Browser atau pastikan printer support ESC/POS.');
                 }
