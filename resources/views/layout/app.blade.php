@@ -8,14 +8,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        :root { --sidebar-w: 240px; }
-        body { background: #f0f4f8; font-family: 'Segoe UI', sans-serif; }
+        :root { 
+            --sidebar-w: 240px;
+            /* Light Mode Colors */
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a2535;
+            --text-secondary: #6c757d;
+            --border-color: #e9ecef;
+            --card-shadow: 0 1px 8px rgba(0,0,0,.06);
+            --sidebar-bg: linear-gradient(180deg, #1a2535 0%, #2c3e50 100%);
+        }
+        
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --bg-primary: #1a1d23;
+            --bg-secondary: #25282e;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --border-color: #3a3d44;
+            --card-shadow: 0 1px 8px rgba(0,0,0,.3);
+            --sidebar-bg: linear-gradient(180deg, #0f1419 0%, #1a1d23 100%);
+        }
+        
+        body { 
+            background: var(--bg-primary); 
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
         /* ── Sidebar ── */
         .sidebar {
             width: var(--sidebar-w);
             min-height: 100vh;
-            background: linear-gradient(180deg, #1a2535 0%, #2c3e50 100%);
+            background: var(--sidebar-bg);
             position: fixed;
             top: 0; left: 0;
             display: flex;
@@ -101,22 +128,51 @@
             flex-direction: column;
         }
         .topbar {
-            background: white;
+            background: var(--bg-secondary);
             padding: 14px 28px;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 50;
-            box-shadow: 0 1px 8px rgba(0,0,0,.06);
+            box-shadow: var(--card-shadow);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        .topbar-title { font-size: 1.1rem; font-weight: 700; color: #1a2535; }
+        .topbar-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
         .main-content { padding: 28px; flex: 1; }
 
         /* ── Cards ── */
-        .card { border-radius: 12px !important; }
+        .card { 
+            border-radius: 12px !important;
+            background: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* ── Dark Mode Toggle ── */
+        .theme-toggle {
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 20px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,.7);
+            font-size: 0.85rem;
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,.15);
+            color: #fff;
+        }
+        .theme-toggle i {
+            font-size: 1rem;
+        }
 
         /* ── Mobile Responsive ── */
         .sidebar-overlay {
@@ -238,6 +294,13 @@
                 <div class="user-role">Administrator</div>
             </div>
         </div>
+        
+        {{-- Dark Mode Toggle --}}
+        <div class="theme-toggle mb-2" onclick="toggleTheme()" id="themeToggle">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+            <span id="themeText">Dark Mode</span>
+        </div>
+        
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <a href="{{ route('profile.edit') }}" class="btn btn-sm w-100 mb-2"
@@ -357,6 +420,38 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Dark Mode Toggle
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeUI(newTheme);
+}
+
+function updateThemeUI(theme) {
+    const icon = document.getElementById('themeIcon');
+    const text = document.getElementById('themeText');
+    
+    if (theme === 'dark') {
+        icon.className = 'bi bi-sun-fill';
+        text.textContent = 'Light Mode';
+    } else {
+        icon.className = 'bi bi-moon-stars-fill';
+        text.textContent = 'Dark Mode';
+    }
+}
+
+// Load theme on page load
+(function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeUI(savedTheme);
+})();
+
+// Sidebar toggle
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
     document.getElementById('sidebarOverlay').classList.toggle('open');
