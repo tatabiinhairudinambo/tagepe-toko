@@ -288,6 +288,39 @@
             color: #ffffff !important;
         }
         
+        /* Override Bootstrap text utilities in dark mode */
+        [data-theme="dark"] .text-dark {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .text-black {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .text-body {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .display-1,
+        [data-theme="dark"] .display-2,
+        [data-theme="dark"] .display-3,
+        [data-theme="dark"] .display-4,
+        [data-theme="dark"] .display-5,
+        [data-theme="dark"] .display-6 {
+            color: #ffffff !important;
+        }
+        
+        /* Badge in dark mode - ensure text is visible */
+        [data-theme="dark"] .badge.bg-light {
+            background: var(--bg-tertiary) !important;
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .badge.bg-white {
+            background: var(--bg-tertiary) !important;
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .badge.bg-secondary {
+            background: #6c757d !important;
+            color: #ffffff !important;
+        }
+        
         /* ── Alerts ── */
         [data-theme="dark"] .alert-success {
             background: rgba(40, 167, 69, 0.25) !important;
