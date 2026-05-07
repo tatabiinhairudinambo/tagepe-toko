@@ -38,10 +38,10 @@
                         @forelse($produks as $produk)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td><strong>{{ $produk->kode_produk }}</strong></td>
-                            <td>{{ $produk->nama_produk }}</td>
+                            <td><strong>{{ $produk->id }}</strong></td>
+                            <td>{{ $produk->nama }}</td>
                             <td>
-                                <span class="badge bg-secondary">{{ $produk->kategori->nama_kategori }}</span>
+                                <span class="badge bg-secondary">{{ $produk->kategori->nama ?? '-' }}</span>
                             </td>
                             <td>Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
                             <td>
