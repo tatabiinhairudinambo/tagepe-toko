@@ -342,11 +342,11 @@
         
         /* Badge in dark mode - ensure text is visible */
         [data-theme="dark"] .badge.bg-light {
-            background: var(--bg-tertiary) !important;
+            background: #6c757d !important;
             color: #ffffff !important;
         }
         [data-theme="dark"] .badge.bg-white {
-            background: var(--bg-tertiary) !important;
+            background: #6c757d !important;
             color: #ffffff !important;
         }
         [data-theme="dark"] .badge.bg-secondary {
@@ -354,6 +354,11 @@
             color: #ffffff !important;
         }
         [data-theme="dark"] .badge {
+            color: #ffffff !important;
+        }
+        /* Force badge to have visible background */
+        [data-theme="dark"] .badge:not(.bg-primary):not(.bg-success):not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-dark) {
+            background: #6c757d !important;
             color: #ffffff !important;
         }
         
