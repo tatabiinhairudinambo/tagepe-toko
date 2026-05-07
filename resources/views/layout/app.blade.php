@@ -31,9 +31,9 @@
             --bg-primary: #1e1e1e;
             --bg-secondary: #2d2d30;
             --bg-tertiary: #3e3e42;
-            --text-primary: #e4e6eb;
-            --text-secondary: #b0b3b8;
-            --text-muted: #8a8d93;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #999999;
             --border-color: #3e3e42;
             --card-shadow: 0 2px 12px rgba(0,0,0,.4);
             --sidebar-bg: linear-gradient(180deg, #1e1e1e 0%, #252526 100%);
@@ -187,12 +187,18 @@
         }
         .form-control::placeholder {
             color: var(--text-muted) !important;
+            opacity: 0.7;
         }
         .form-label {
             color: var(--text-primary) !important;
+            font-weight: 500;
         }
         .form-text {
             color: var(--text-secondary) !important;
+        }
+        [data-theme="dark"] .form-control option {
+            background: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
         }
         
         /* ── Tables ── */
@@ -235,27 +241,47 @@
         .text-secondary {
             color: var(--text-secondary) !important;
         }
+        [data-theme="dark"] h1, 
+        [data-theme="dark"] h2, 
+        [data-theme="dark"] h3, 
+        [data-theme="dark"] h4, 
+        [data-theme="dark"] h5, 
+        [data-theme="dark"] h6 {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] p,
+        [data-theme="dark"] span,
+        [data-theme="dark"] div,
+        [data-theme="dark"] td,
+        [data-theme="dark"] th,
+        [data-theme="dark"] label {
+            color: var(--text-primary) !important;
+        }
+        [data-theme="dark"] strong,
+        [data-theme="dark"] b {
+            color: #ffffff !important;
+        }
         
         /* ── Alerts ── */
         [data-theme="dark"] .alert-success {
-            background: rgba(40, 167, 69, 0.2) !important;
-            border-color: rgba(40, 167, 69, 0.4) !important;
-            color: #6fd88e !important;
+            background: rgba(40, 167, 69, 0.25) !important;
+            border-color: rgba(40, 167, 69, 0.5) !important;
+            color: #8fec9f !important;
         }
         [data-theme="dark"] .alert-danger {
-            background: rgba(220, 53, 69, 0.2) !important;
-            border-color: rgba(220, 53, 69, 0.4) !important;
-            color: #f78a96 !important;
+            background: rgba(220, 53, 69, 0.25) !important;
+            border-color: rgba(220, 53, 69, 0.5) !important;
+            color: #ffa8b3 !important;
         }
         [data-theme="dark"] .alert-warning {
-            background: rgba(255, 193, 7, 0.2) !important;
-            border-color: rgba(255, 193, 7, 0.4) !important;
-            color: #ffd454 !important;
+            background: rgba(255, 193, 7, 0.25) !important;
+            border-color: rgba(255, 193, 7, 0.5) !important;
+            color: #ffe066 !important;
         }
         [data-theme="dark"] .alert-info {
-            background: rgba(13, 202, 240, 0.2) !important;
-            border-color: rgba(13, 202, 240, 0.4) !important;
-            color: #5de0f5 !important;
+            background: rgba(13, 202, 240, 0.25) !important;
+            border-color: rgba(13, 202, 240, 0.5) !important;
+            color: #7de9f7 !important;
         }
         
         /* ── Badges ── */
