@@ -12,13 +12,13 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('cabang')->latest()->get();
-        return view('user.index', compact('users'));
+        return view('backend.user.index', compact('users'));
     }
 
     public function create()
     {
         $cabangs = Cabang::where('is_active', true)->get();
-        return view('user.form', compact('cabangs'));
+        return view('backend.user.form', compact('cabangs'));
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $cabangs = Cabang::where('is_active', true)->get();
-        return view('user.form', compact('user', 'cabangs'));
+        return view('backend.user.form', compact('user', 'cabangs'));
     }
 
     public function update(Request $request, User $user)

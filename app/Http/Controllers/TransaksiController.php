@@ -51,7 +51,7 @@ class TransaksiController extends Controller
             $produks = Produk::with('kategori')->where('stok', '>', 0)->get();
         }
         
-        return view('transaksi.index', compact('produks', 'cabangs', 'cabang_id'));
+        return view('backend.transaksi.index', compact('produks', 'cabangs', 'cabang_id'));
     }
     
     // Set cabang untuk transaksi
@@ -174,7 +174,7 @@ class TransaksiController extends Controller
     {
         $transaksi = Transaksi::with('details.produk')->findOrFail($id);
         $toko = \App\Models\Toko::first();
-        return view('transaksi.struk', compact('transaksi', 'toko'));
+        return view('backend.transaksi.struk', compact('transaksi', 'toko'));
     }
 
     // Laporan transaksi
@@ -227,7 +227,7 @@ class TransaksiController extends Controller
         $grafikPendapatan = $grafikData->pluck('total_hari')->toArray();
         $grafikJumlah = $grafikData->pluck('jumlah_transaksi')->toArray();
 
-        return view('transaksi.laporan', compact('transaksis', 'total_pendapatan', 'grafikLabels', 'grafikPendapatan', 'grafikJumlah', 'cabangs'));
+        return view('backend.transaksi.laporan', compact('transaksis', 'total_pendapatan', 'grafikLabels', 'grafikPendapatan', 'grafikJumlah', 'cabangs'));
     }
 
     // Detail transaksi
@@ -235,7 +235,7 @@ class TransaksiController extends Controller
     {
         $transaksi = Transaksi::with('details.produk')->findOrFail($id);
         $toko = \App\Models\Toko::first();
-        return view('transaksi.detail', compact('transaksi', 'toko'));
+        return view('backend.transaksi.detail', compact('transaksi', 'toko'));
     }
 
     // Export PDF
@@ -249,7 +249,7 @@ class TransaksiController extends Controller
         $total_pendapatan = $transaksis->sum('total');
         $toko = \App\Models\Toko::first();
 
-        return view('transaksi.export-pdf', compact('transaksis', 'total_pendapatan', 'toko', 'request'));
+        return view('backend.transaksi.export-pdf', compact('transaksis', 'total_pendapatan', 'toko', 'request'));
     }
 
     // Export CSV (Excel)

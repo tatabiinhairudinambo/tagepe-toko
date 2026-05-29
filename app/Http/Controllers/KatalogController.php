@@ -9,7 +9,7 @@ class KatalogController extends Controller
 {
     public function index()
     {
-        return view('katalog', [
+        return view('frontend.katalog.index', [
             'produks'       => Produk::with('kategori')->get(),
             'kategoris'     => Kategori::all(),
             'totalProduk'   => Produk::count(),

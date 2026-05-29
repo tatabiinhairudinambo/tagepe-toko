@@ -12,12 +12,12 @@ class CabangController extends Controller
     public function index()
     {
         $cabangs = Cabang::withCount('stokCabangs')->latest()->get();
-        return view('cabang.index', compact('cabangs'));
+        return view('backend.cabang.index', compact('cabangs'));
     }
 
     public function create()
     {
-        return view('cabang.form');
+        return view('backend.cabang.form');
     }
 
     public function store(Request $request)
@@ -36,7 +36,7 @@ class CabangController extends Controller
     public function edit($id)
     {
         $cabang = Cabang::findOrFail($id);
-        return view('cabang.form', compact('cabang'));
+        return view('backend.cabang.form', compact('cabang'));
     }
 
     public function update(Request $request, $id)
@@ -73,7 +73,7 @@ class CabangController extends Controller
             ->get()
             ->keyBy('produk_id');
         
-        return view('cabang.stok', compact('cabang', 'produks', 'stoks'));
+        return view('backend.cabang.stok', compact('cabang', 'produks', 'stoks'));
     }
 
     // Update stok cabang

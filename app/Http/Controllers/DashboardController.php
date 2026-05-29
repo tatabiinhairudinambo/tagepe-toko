@@ -44,7 +44,7 @@ class DashboardController extends Controller
             $grafikQuery->where('cabang_id', $cabang_id);
         }
 
-        return view('dashboard', [
+        return view('backend.dashboard.index', [
             'totalKategori'    => Kategori::count(),
             'totalProduk'      => Produk::count(),
             'totalNilai'       => Produk::selectRaw('SUM(harga * stok) as total')->value('total') ?? 0,

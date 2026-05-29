@@ -28,7 +28,7 @@ class PemesananController extends Controller
         }
 
         $pemesanans = $query->paginate(20);
-        return view('pemesanan.index', compact('pemesanans'));
+        return view('backend.pemesanan.index', compact('pemesanans'));
     }
 
     public function create()
@@ -55,7 +55,7 @@ class PemesananController extends Controller
         }
 
         $cabangs = Cabang::where('is_active', true)->get();
-        return view('pemesanan.create', compact('produks', 'cabangs', 'cabang_id'));
+        return view('backend.pemesanan.create', compact('produks', 'cabangs', 'cabang_id'));
     }
 
     public function store(Request $request)
@@ -183,6 +183,6 @@ class PemesananController extends Controller
     {
         $pemesanan->load('details.produk', 'cabang');
         $toko = \App\Models\Toko::first();
-        return view('pemesanan.nota', compact('pemesanan', 'toko'));
+        return view('backend.pemesanan.nota', compact('pemesanan', 'toko'));
     }
 }

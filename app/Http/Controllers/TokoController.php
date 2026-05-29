@@ -11,14 +11,14 @@ class TokoController extends Controller
     public function index()
     {
         $toko = Toko::first();
-        return view('toko.index', compact('toko'));
+        return view('backend.toko.index', compact('toko'));
     }
 
     // Form edit data toko
     public function edit($id)
     {
         $toko = Toko::findOrFail($id);
-        return view('toko.edit', compact('toko'));
+        return view('backend.toko.edit', compact('toko'));
     }
 
     // Simpan perubahan data toko

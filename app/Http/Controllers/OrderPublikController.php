@@ -25,7 +25,7 @@ class OrderPublikController extends Controller
                 ->orWhereHas('kategori', fn($k) => $k->where('nama', 'like', "%$search%")))
             ->get();
 
-        return view('order.index', compact('produks', 'cabangs', 'cabang_id', 'search'));
+        return view('frontend.order.index', compact('produks', 'cabangs', 'cabang_id', 'search'));
     }
 
     // Pencarian produk via server
@@ -90,7 +90,7 @@ class OrderPublikController extends Controller
     public function sukses($kode)
     {
         $order = OrderPublik::with('details.produk', 'cabang')->where('kode_order', $kode)->firstOrFail();
-        return view('order.sukses', compact('order'));
+        return view('frontend.order.sukses', compact('order'));
     }
 
     // Cek status order
@@ -100,6 +100,6 @@ class OrderPublikController extends Controller
         if ($request->kode) {
             $order = OrderPublik::with('details.produk', 'cabang')->where('kode_order', $request->kode)->first();
         }
-        return view('order.cek-status', compact('order'));
+        return view('frontend.order.cek-status', compact('order'));
     }
 }

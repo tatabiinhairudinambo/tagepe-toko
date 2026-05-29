@@ -12,7 +12,7 @@ class TokoSeeder extends Seeder
         // Hanya insert jika tabel masih kosong
         if (DB::table('toko')->count() === 0) {
             DB::table('toko')->insert([
-                'nama_toko'  => 'Tagepe Toko',
+                'nama_toko'  => 'Tagepe-digital UMKM',
                 'alamat'     => 'Jl buntu.  no 1, Kota buta huruf',
                 'telepon'    => '082213840415',
                 'email'      => 'toko@datatoko.com',

@@ -29,7 +29,7 @@ class KategoriController extends Controller
 
         // compact('kategoris') → shortcut untuk ['kategoris' => $kategoris]
         // Mengirim variabel $kategoris ke view kategori/index.blade.php
-        return view('kategori.index', compact('kategoris'));
+        return view('backend.kategori.index', compact('kategoris'));
     }
 
     // -------------------------------------------------------
@@ -38,7 +38,7 @@ class KategoriController extends Controller
     public function create()
     {
         // Hanya menampilkan view form kosong (tidak perlu data dari DB)
-        return view('kategori.form');
+        return view('backend.kategori.form');
     }
 
     // -------------------------------------------------------
@@ -70,7 +70,7 @@ class KategoriController extends Controller
     {
         // $kategori sudah otomatis diisi oleh Laravel (Route Model Binding)
         // compact() mengirim data kategori ke view untuk mengisi form
-        return view('kategori.form', compact('kategori'));
+        return view('backend.kategori.form', compact('kategori'));
     }
 
     // -------------------------------------------------------

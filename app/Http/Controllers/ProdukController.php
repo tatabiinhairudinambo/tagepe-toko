@@ -19,13 +19,13 @@ class ProdukController extends Controller
         } else {
             $produks = Produk::with('kategori')->where('status', 'aktif')->get();
         }
-        return view('produk.index', compact('produks'));
+        return view('backend.produk.index', compact('produks'));
     }
 
     public function create()
     {
         $kategoris = Kategori::all();
-        return view('produk.form', compact('kategoris'));
+        return view('backend.produk.form', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -72,7 +72,7 @@ class ProdukController extends Controller
     public function edit(Produk $produk)
     {
         $kategoris = Kategori::all();
-        return view('produk.form', compact('produk', 'kategoris'));
+        return view('backend.produk.form', compact('produk', 'kategoris'));
     }
 
     public function update(Request $request, Produk $produk)

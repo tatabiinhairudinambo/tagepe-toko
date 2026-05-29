@@ -28,7 +28,7 @@ class OrderKasirController extends Controller
         $orders = $query->paginate(20);
         $menunggu = (clone $query)->where('status', 'menunggu')->count();
 
-        return view('order.kasir', compact('orders', 'menunggu'));
+        return view('backend.order.kasir', compact('orders', 'menunggu'));
     }
 
     // Proses order — ubah status jadi diproses

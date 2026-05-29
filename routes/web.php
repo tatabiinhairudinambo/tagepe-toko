@@ -2,14 +2,21 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TokoController;
 use Illuminate\Support\Facades\Route;
 
+// Homepage Modern
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 // Halaman publik - katalog produk (tanpa login)
 Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog');
+
+// Artikel & Promo (tanpa login)
+Route::get('/artikel', [\App\Http\Controllers\ArtikelController::class, 'index'])->name('artikel.index');
 
 // Order publik (tanpa login)
 Route::get('/order', [\App\Http\Controllers\OrderPublikController::class, 'index'])->name('order.index');
@@ -34,6 +41,17 @@ Route::post('/test-upload', function(\Illuminate\Http\Request $request) {
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Register
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+// Forgot & Reset Password
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
 
 // Halaman yang butuh login
 Route::middleware('auth')->group(function () {
