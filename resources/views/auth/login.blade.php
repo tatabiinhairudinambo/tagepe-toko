@@ -924,11 +924,7 @@
             font-weight: 700;
             margin-left: 5px;
             transition: color 0.3s ease;
-        }
-        
-        .register-link:hover {
-            color: #ffed4e;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            display: none;
         }
         
         /* Alert */
@@ -1217,7 +1213,7 @@
                         <input type="checkbox" name="remember">
                         <span>Ingat saya</span>
                     </label>
-                    <a href="{{ route('password.request') }}" class="forgot-link">Lupa password?</a>
+                    <span class="forgot-link text-muted" style="font-size:.8rem">Hubungi admin jika lupa password</span>
                 </div>
                 
                 <button type="submit" class="btn-submit">
@@ -1226,8 +1222,7 @@
             </form>
             
             <div class="register-section">
-                Belum punya akun?
-                <a href="{{ route('register') }}" class="register-link">Daftar Sekarang</a>
+                Hubungi admin untuk mendapatkan akses
             </div>
             
             <div class="form-footer">
