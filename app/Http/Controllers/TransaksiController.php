@@ -9,6 +9,7 @@ use App\Models\Cabang;
 use App\Models\StokCabang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\DatabaseHelper;
 
 class TransaksiController extends Controller
 {
@@ -205,13 +206,15 @@ class TransaksiController extends Controller
         $cabangs = \App\Models\Cabang::all();
 
         // Data grafik: pendapatan per hari (30 hari terakhir)
+        $dateExpr = DatabaseHelper::date('tanggal');
+        
         $grafikQuery = Transaksi::select(
-                DB::raw('DATE(tanggal) as tanggal_hari'),
+                DB::raw("{$dateExpr} as tanggal_hari"),
                 DB::raw('SUM(total) as total_hari'),
                 DB::raw('COUNT(*) as jumlah_transaksi')
             )
-            ->groupBy('tanggal_hari')
-            ->orderBy('tanggal_hari');
+            ->groupBy(DB::raw($dateExpr))
+            ->orderBy(DB::raw($dateExpr));
 
         if ($request->tanggal_dari) {
             $grafikQuery->whereDate('tanggal', '>=', $request->tanggal_dari);

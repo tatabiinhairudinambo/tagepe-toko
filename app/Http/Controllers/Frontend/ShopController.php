@@ -1,16 +1,89 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
-use App\Models\Kategori;
+use App\Http\Controllers\Controller;
+use App\Models\Banner;
+use App\Models\Artikel;
+use App\Models\Testimoni;
 use App\Models\Produk;
+use App\Models\Kategori;
+use App\Models\Toko;
+use Illuminate\Http\Request;
 
-class KatalogController extends Controller
+class ShopController extends Controller
 {
+    /**
+     * Halaman utama toko online
+     * Menampilkan banner, produk unggulan, artikel, testimoni
+     */
     public function index()
     {
-        $produks = Produk::with('kategori')->paginate(16); // 4 baris x 4 kolom = 16 produk per halaman
-        $toko = \App\Models\Toko::first();
+        $toko = Toko::first();
+        
+        // Cek apakah tabel banner ada
+        $banners = collect([]);
+        try {
+            if (\Schema::hasTable('banners')) {
+                $banners = Banner::where('status', 'aktif')->get();
+            }
+        } catch (\Exception $e) {
+            // Jika error, biarkan banners kosong
+        }
+        
+        // Ambil produk unggulan (8 produk terbaru yang ada stok)
+        // Tidak perlu cek status 'approved' jika belum ada workflow approval
+        $produkUnggulan = Produk::where('stok', '>', 0)
+            ->latest()
+            ->take(8)
+            ->get();
+        
+        // Cek apakah tabel artikel ada
+        $artikels = collect([]);
+        try {
+            if (\Schema::hasTable('artikels')) {
+                $artikels = Artikel::where('status', 'published')
+                    ->orderBy('created_at', 'desc')
+                    ->take(3)
+                    ->get();
+            }
+        } catch (\Exception $e) {
+            // Jika error, biarkan artikels kosong
+        }
+        
+        // Cek apakah tabel testimoni ada
+        $testimonis = collect([]);
+        try {
+            if (\Schema::hasTable('testimonis')) {
+                $testimonis = Testimoni::where('status', 'aktif')
+                    ->orderBy('created_at', 'desc')
+                    ->take(6)
+                    ->get();
+            }
+        } catch (\Exception $e) {
+            // Jika error, biarkan testimonis kosong
+        }
+        
+        return view('frontend.shop.home', compact(
+            'toko',
+            'banners',
+            'produkUnggulan',
+            'artikels',
+            'testimonis'
+        ));
+    }
+    
+    /**
+     * Halaman katalog produk
+     * Menampilkan semua produk dengan filter dan pagination
+     */
+    public function katalog()
+    {
+        $produks = Produk::with('kategori')
+            ->where('status', 'approved')
+            ->paginate(16);
+        
+        $toko = Toko::first();
         
         // Data artikel
         $artikels = [
@@ -65,10 +138,10 @@ class KatalogController extends Controller
             ]
         ];
         
-        return view('frontend.katalog.index', [
+        return view('frontend.shop.katalog.index', [
             'produks'       => $produks,
             'kategoris'     => Kategori::all(),
-            'totalProduk'   => Produk::count(),
+            'totalProduk'   => Produk::where('status', 'approved')->count(),
             'totalKategori' => Kategori::count(),
             'artikels'      => $artikels,
             'promosis'      => $promosis,

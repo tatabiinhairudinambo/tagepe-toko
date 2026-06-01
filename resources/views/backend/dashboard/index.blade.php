@@ -178,15 +178,15 @@
         <div class="card border-0 shadow-sm h-100" style="border-radius:12px!important;overflow:hidden">
             <div class="card-body p-0">
                 <div class="d-flex">
-                    <div class="flex-grow-1 p-3">
-                        <div class="text-muted small fw-semibold text-uppercase mb-1" style="letter-spacing:.5px;font-size:.7rem">Total Pendapatan</div>
-                        <div class="fw-bold text-dark" style="font-size:1.1rem">
+                    <div class="flex-grow-1 p-3" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);">
+                        <div class="text-white small fw-semibold text-uppercase mb-1" style="letter-spacing:.5px;font-size:.7rem;opacity:0.9">Total Pendapatan</div>
+                        <div class="fw-bold text-white" style="font-size:1.1rem">
                             Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
                         </div>
-                        <span class="text-muted small mt-1 d-inline-block" style="font-size:.7rem">semua transaksi</span>
+                        <span class="text-white small mt-1 d-inline-block" style="font-size:.7rem;opacity:0.8">semua transaksi</span>
                     </div>
                     <div class="d-flex align-items-center justify-content-center px-3"
-                         style="background:linear-gradient(135deg,#9b59b6,#8e44ad);min-width:70px">
+                         style="background:linear-gradient(135deg,#8e44ad,#71368a);min-width:70px">
                         <i class="bi bi-graph-up-arrow text-white" style="font-size:1.8rem"></i>
                     </div>
                 </div>

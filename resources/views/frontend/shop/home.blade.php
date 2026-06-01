@@ -3,6 +3,7 @@
 @section('title', 'Home')
 
 @push('styles')
+<link href="{{ asset('css/shop-responsive.css') }}" rel="stylesheet">
 <style>
     /* Hero Section Fullscreen */
     .hero-section {
@@ -55,7 +56,7 @@
     
     .hero-subtitle {
         font-size: 1.5rem;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.85);
         margin-bottom: 2rem;
         animation: subtitleFadeIn 0.8s ease-out 0.4s both;
     }
@@ -121,6 +122,10 @@
         background-clip: text;
     }
     
+    .stats-card .text-muted {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
     /* Product Card */
     .product-card {
         background: var(--glass-bg);
@@ -167,6 +172,15 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+    
+    .product-card .text-muted,
+    .product-card .small {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
+    .product-card h5 {
+        color: rgba(255, 255, 255, 0.95);
     }
     
     /* Article Card */
@@ -223,6 +237,24 @@
         color: var(--warning);
     }
     
+    .article-card .text-muted,
+    .article-card .small {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
+    .article-card h5 {
+        color: rgba(255, 255, 255, 0.95);
+    }
+    
+    .testimonial-card .text-muted,
+    .testimonial-card p {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    .testimonial-card h6 {
+        color: rgba(255, 255, 255, 0.95);
+    }
+    
     /* Section Title */
     .section-title {
         font-size: 2.5rem;
@@ -236,7 +268,7 @@
     
     .section-subtitle {
         font-size: 1.2rem;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.8);
         margin-bottom: 3rem;
     }
     
@@ -515,8 +547,8 @@
             </div>
             @empty
             <div class="col-12 text-center py-5">
-                <i class="bi bi-box-seam" style="font-size: 4rem; color: var(--text-muted);"></i>
-                <p class="text-muted mt-3">Belum ada produk tersedia</p>
+                <i class="bi bi-box-seam" style="font-size: 4rem; color: rgba(255, 255, 255, 0.5);"></i>
+                <p class="mt-3" style="color: rgba(255, 255, 255, 0.7);">Belum ada produk tersedia</p>
             </div>
             @endforelse
         </div>

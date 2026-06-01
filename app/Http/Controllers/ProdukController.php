@@ -10,16 +10,27 @@ use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+        $query = Produk::with('kategori');
+        
+        // Filter berdasarkan kategori jika ada parameter
+        if ($request->has('kategori') && $request->kategori != '') {
+            $query->where('kategori_id', $request->kategori);
+        }
+        
         // Admin lihat semua, kasir hanya lihat produk aktif
         if ($user->role === 'admin') {
-            $produks = Produk::with('kategori')->get();
+            $produks = $query->get();
         } else {
-            $produks = Produk::with('kategori')->where('status', 'aktif')->get();
+            $produks = $query->where('status', 'aktif')->get();
         }
-        return view('backend.produk.index', compact('produks'));
+        
+        // Get kategori yang dipilih untuk ditampilkan di view
+        $kategoriDipilih = $request->kategori ? \App\Models\Kategori::find($request->kategori) : null;
+        
+        return view('backend.produk.index', compact('produks', 'kategoriDipilih'));
     }
 
     public function create()

@@ -1,0 +1,885 @@
+/**
+ * SHOP RESPONSIVE CSS - TAGEPE TOKO
+ * Optimized for online shop frontend
+ */
+
+/* ============================================
+   SHOP SPECIFIC RESPONSIVE
+   ============================================ */
+
+/* ============================================
+   DESKTOP (1920px+)
+   ============================================ */
+@media (min-width: 1920px) {
+    .hero-section {
+        min-height: 100vh;
+        padding: 120px 0;
+    }
+    
+    .hero-title {
+        font-size: 4.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.8rem;
+    }
+    
+    .product-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .section-title {
+        font-size: 3rem;
+    }
+}
+
+/* ============================================
+   LAPTOP (1280px - 1919px)
+   ============================================ */
+@media (max-width: 1919px) and (min-width: 1280px) {
+    .hero-section {
+        min-height: 90vh;
+        padding: 100px 0;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .product-image {
+        height: 280px;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* ============================================
+   IPAD / SMALL LAPTOP (1024px - 1279px)
+   ============================================ */
+@media (max-width: 1279px) and (min-width: 1024px) {
+    .hero-section {
+        min-height: 80vh;
+        padding: 80px 0 60px;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .hero-buttons {
+        gap: 1rem !important;
+    }
+    
+    .hero-buttons .btn {
+        padding: 12px 28px;
+        font-size: 15px;
+    }
+    
+    /* Product Grid - 3 columns */
+    .product-grid .col-lg-3 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    
+    .product-card {
+        margin-bottom: 20px;
+    }
+    
+    .product-image {
+        height: 240px;
+    }
+    
+    .product-card .card-body {
+        padding: 16px;
+    }
+    
+    .product-price {
+        font-size: 1.3rem;
+    }
+    
+    /* Stats */
+    .stats-card {
+        padding: 1.5rem;
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+    }
+    
+    /* Banner */
+    .banner-slide {
+        height: 400px;
+    }
+    
+    /* Section spacing */
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    /* Article cards */
+    .article-card {
+        margin-bottom: 20px;
+    }
+    
+    .article-image {
+        height: 180px;
+    }
+    
+    /* Testimonial */
+    .testimonial-card {
+        padding: 1.5rem;
+    }
+    
+    /* Promo banner */
+    .promo-banner {
+        padding: 2.5rem;
+    }
+    
+    .promo-banner .display-5 {
+        font-size: 2rem;
+    }
+}
+
+/* ============================================
+   TABLET (768px - 1023px)
+   ============================================ */
+@media (max-width: 1023px) and (min-width: 768px) {
+    /* Hero Section */
+    .hero-section {
+        min-height: 70vh;
+        padding: 60px 0 40px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+        line-height: 1.3;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-buttons {
+        gap: 0.75rem !important;
+        flex-wrap: wrap;
+    }
+    
+    .hero-buttons .btn {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+    
+    .hero-image img {
+        max-width: 400px;
+    }
+    
+    /* Product Grid - 2 columns */
+    .product-grid .col-lg-3,
+    .product-grid .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    .product-card {
+        margin-bottom: 16px;
+    }
+    
+    .product-image {
+        height: 220px;
+    }
+    
+    .product-card .card-body {
+        padding: 14px;
+    }
+    
+    .product-card h5 {
+        font-size: 1rem;
+    }
+    
+    .product-price {
+        font-size: 1.2rem;
+    }
+    
+    .product-badge {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    /* Stats - 2 columns */
+    .stats-card {
+        padding: 1.25rem;
+        margin-bottom: 12px;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+    }
+    
+    .stats-card .text-muted {
+        font-size: 0.9rem;
+    }
+    
+    /* Banner */
+    .banner-slide {
+        height: 350px;
+    }
+    
+    .banner-content {
+        padding: 2rem;
+    }
+    
+    .banner-content h2 {
+        font-size: 2rem;
+    }
+    
+    .banner-content p {
+        font-size: 1rem;
+    }
+    
+    /* Section */
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Article Grid - 2 columns */
+    .article-card {
+        margin-bottom: 16px;
+    }
+    
+    .article-image {
+        height: 160px;
+    }
+    
+    .article-card .card-body {
+        padding: 16px;
+    }
+    
+    /* Testimonial - 2 columns */
+    .testimonial-card {
+        padding: 1.25rem;
+        margin-bottom: 16px;
+    }
+    
+    .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    /* Promo Banner */
+    .promo-banner {
+        padding: 2rem;
+    }
+    
+    .promo-banner .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .promo-banner .lead {
+        font-size: 1rem;
+    }
+    
+    .promo-banner .display-1 {
+        font-size: 4rem;
+    }
+    
+    /* Navbar */
+    .navbar-modern {
+        padding: 0.75rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.3rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 14px;
+    }
+    
+    /* Footer */
+    .footer-modern {
+        padding: 3rem 0 1.5rem;
+    }
+    
+    .footer-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-link {
+        font-size: 0.9rem;
+        padding: 0.4rem 0;
+    }
+}
+
+/* ============================================
+   MOBILE (320px - 767px)
+   ============================================ */
+@media (max-width: 767px) {
+    /* Hero Section */
+    .hero-section {
+        min-height: auto;
+        padding: 40px 0 30px;
+    }
+    
+    .hero-content {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 0.75rem !important;
+        width: 100%;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 14px;
+        justify-content: center;
+    }
+    
+    .hero-image {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .hero-image img {
+        max-width: 280px;
+    }
+    
+    /* Product Grid - 2 columns on mobile */
+    .product-grid .col-lg-3,
+    .product-grid .col-md-4,
+    .product-grid .col-sm-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 0 6px;
+    }
+    
+    .product-card {
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .product-image {
+        height: 140px;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .product-card .card-body {
+        padding: 10px;
+    }
+    
+    .product-card .small {
+        font-size: 0.7rem;
+    }
+    
+    .product-card h5 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.3;
+    }
+    
+    .product-price {
+        font-size: 1rem;
+    }
+    
+    .product-badge {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Stats - 2 columns */
+    .stats-card {
+        padding: 1rem;
+        margin-bottom: 10px;
+        border-radius: 12px;
+    }
+    
+    .stats-number {
+        font-size: 1.8rem;
+    }
+    
+    .stats-card .text-muted {
+        font-size: 0.8rem;
+    }
+    
+    /* Banner */
+    .banner-slider {
+        border-radius: 16px;
+        margin: 0 -16px;
+    }
+    
+    .banner-slide {
+        height: 250px;
+    }
+    
+    .banner-content {
+        padding: 1.5rem;
+    }
+    
+    .banner-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .banner-content p {
+        font-size: 0.9rem;
+    }
+    
+    .banner-content .btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .carousel-indicators {
+        margin-bottom: 0.5rem;
+    }
+    
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+    
+    /* Section */
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .text-center.mb-5 {
+        margin-bottom: 2rem !important;
+    }
+    
+    /* Article Grid - 1 column */
+    .article-card {
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .article-image {
+        height: 180px;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .article-card .card-body {
+        padding: 12px;
+    }
+    
+    .article-card h5 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    
+    .article-card .small {
+        font-size: 0.75rem;
+    }
+    
+    .article-card p {
+        font-size: 0.85rem;
+    }
+    
+    .article-card .btn-sm {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+    
+    /* Testimonial - 1 column */
+    .testimonial-card {
+        padding: 1rem;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .testimonial-avatar {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .testimonial-card h6 {
+        font-size: 0.9rem;
+    }
+    
+    .testimonial-card p {
+        font-size: 0.85rem;
+    }
+    
+    .rating-stars {
+        font-size: 0.8rem;
+    }
+    
+    /* Promo Banner */
+    .promo-banner {
+        padding: 1.5rem;
+        border-radius: 16px;
+        text-align: center;
+    }
+    
+    .promo-banner .display-5 {
+        font-size: 1.5rem;
+    }
+    
+    .promo-banner .lead {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .promo-banner .display-1 {
+        font-size: 3rem;
+    }
+    
+    .promo-banner .h4 {
+        font-size: 1.2rem;
+    }
+    
+    .promo-banner .btn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    /* CTA Section */
+    .py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    /* Navbar */
+    .navbar-modern {
+        padding: 0.75rem 0;
+    }
+    
+    .navbar-modern.scrolled {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .navbar-brand i {
+        font-size: 1.2rem;
+    }
+    
+    .navbar-toggler {
+        padding: 6px 10px;
+        font-size: 1.2rem;
+        border: none;
+    }
+    
+    .navbar-collapse {
+        margin-top: 12px;
+    }
+    
+    .navbar-nav {
+        gap: 0;
+    }
+    
+    .nav-link {
+        padding: 12px 16px !important;
+        font-size: 14px;
+        border-radius: 8px;
+        margin: 2px 0;
+    }
+    
+    .nav-link:hover {
+        background: rgba(99, 102, 241, 0.1);
+    }
+    
+    .navbar-nav .d-flex {
+        margin-top: 12px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .theme-toggle {
+        width: 100%;
+        height: 44px;
+        border-radius: 8px;
+        justify-content: center;
+    }
+    
+    .btn-primary.btn-sm {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    /* Footer */
+    .footer-modern {
+        padding: 2rem 0 1rem;
+    }
+    
+    .footer-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer-link {
+        font-size: 0.85rem;
+        padding: 0.35rem 0;
+    }
+    
+    .social-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .footer-modern p {
+        font-size: 0.85rem;
+    }
+    
+    /* Scroll to top */
+    .scroll-top {
+        width: 44px;
+        height: 44px;
+        bottom: 1rem;
+        right: 1rem;
+    }
+    
+    /* Spacing adjustments */
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+    
+    .mt-5 {
+        margin-top: 2rem !important;
+    }
+    
+    .g-4 {
+        --bs-gutter-x: 0.75rem;
+        --bs-gutter-y: 0.75rem;
+    }
+}
+
+/* ============================================
+   SMALL MOBILE (320px - 575px)
+   ============================================ */
+@media (max-width: 575px) {
+    /* Hero */
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hero-image img {
+        max-width: 240px;
+    }
+    
+    /* Product - Keep 2 columns but smaller */
+    .product-image {
+        height: 120px;
+    }
+    
+    .product-card .card-body {
+        padding: 8px;
+    }
+    
+    .product-card h5 {
+        font-size: 0.8rem;
+    }
+    
+    .product-price {
+        font-size: 0.9rem;
+    }
+    
+    /* Stats - 2 columns */
+    .stats-number {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card .text-muted {
+        font-size: 0.75rem;
+    }
+    
+    /* Banner */
+    .banner-slide {
+        height: 200px;
+    }
+    
+    .banner-content h2 {
+        font-size: 1.2rem;
+    }
+    
+    .banner-content p {
+        font-size: 0.8rem;
+    }
+    
+    /* Section */
+    .section-title {
+        font-size: 1.3rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    /* Article */
+    .article-image {
+        height: 150px;
+    }
+    
+    /* Promo */
+    .promo-banner .display-5 {
+        font-size: 1.3rem;
+    }
+    
+    .promo-banner .display-1 {
+        font-size: 2.5rem;
+    }
+    
+    /* Buttons */
+    .btn-lg {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+/* ============================================
+   LANDSCAPE MODE (Mobile)
+   ============================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        min-height: auto;
+        padding: 30px 0;
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-image {
+        display: none;
+    }
+    
+    .banner-slide {
+        height: 300px;
+    }
+}
+
+/* ============================================
+   HOVER EFFECTS (Desktop Only)
+   ============================================ */
+@media (hover: hover) and (pointer: fine) {
+    .product-card:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+    
+    .article-card:hover {
+        transform: translateY(-8px);
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-8px);
+    }
+}
+
+/* ============================================
+   TOUCH DEVICE (No Hover)
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+    .product-card:hover,
+    .article-card:hover,
+    .testimonial-card:hover,
+    .stats-card:hover {
+        transform: none;
+    }
+    
+    .product-card:active {
+        transform: scale(0.98);
+    }
+    
+    /* Larger touch targets */
+    .btn,
+    .nav-link,
+    .footer-link {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+/* ============================================
+   PRINT (Shop Pages)
+   ============================================ */
+@media print {
+    .navbar-modern,
+    .footer-modern,
+    .hero-buttons,
+    .scroll-top,
+    .theme-toggle,
+    .btn {
+        display: none !important;
+    }
+    
+    .hero-section {
+        padding: 20px 0;
+    }
+    
+    .product-card,
+    .article-card {
+        page-break-inside: avoid;
+    }
+}

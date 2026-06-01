@@ -2,11 +2,15 @@
 <html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>@yield('title', 'Home') - {{ $toko->nama_toko ?? 'Tagepe-digital UMKM' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -257,7 +261,7 @@
         }
         
         .footer-link {
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             display: block;
             padding: 0.5rem 0;
@@ -267,6 +271,10 @@
         .footer-link:hover {
             color: var(--primary);
             padding-left: 0.5rem;
+        }
+        
+        .footer-modern p.text-muted {
+            color: rgba(255, 255, 255, 0.7) !important;
         }
         
         .social-icon {
@@ -396,27 +404,16 @@
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
-                        <i class="bi bi-house me-1"></i>Home
+                        <i class="bi bi-house me-1"></i>Beranda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('shop.home') ? 'active' : '' }}" href="{{ route('shop.home') }}">
+                        <i class="bi bi-shop me-1"></i>Toko Online
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('katalog') ? 'active' : '' }}" href="{{ route('katalog') }}">
-                        <i class="bi bi-grid me-1"></i>Produk
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('artikel.*') ? 'active' : '' }}" href="{{ route('artikel.index') }}">
-                        <i class="bi bi-newspaper me-1"></i>Artikel
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#promo">
-                        <i class="bi bi-tag me-1"></i>Promo
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#tentang">
-                        <i class="bi bi-info-circle me-1"></i>Tentang
+                    <a class="nav-link" href="{{ route('order.index') }}">
+                        <i class="bi bi-cart me-1"></i>Order
                     </a>
                 </li>
                 <li class="nav-item">
@@ -429,8 +426,8 @@
                 <div class="theme-toggle" id="themeToggle">
                     <i class="bi bi-moon-stars" id="themeIcon"></i>
                 </div>
-                <a href="{{ route('order.index') }}" class="btn btn-primary btn-sm">
-                    <i class="bi bi-cart me-1"></i>Order
+                <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
                 </a>
             </div>
         </div>
@@ -448,7 +445,7 @@
         <div class="row g-4">
             <div class="col-lg-4">
                 <h3 class="footer-title">{{ $toko->nama_toko ?? 'Tagepe-digital UMKM' }}</h3>
-                <p class="text-muted">{{ $toko->alamat ?? 'Toko online modern dengan produk berkualitas dan harga terbaik.' }}</p>
+                <p class="text-muted">{{ $toko->deskripsi ?? 'Jln pahlawan kel namatio puncak,pahlawan,masohi maluku tengah indonesia.' }}</p>
                 <div class="mt-3">
                     <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
@@ -458,10 +455,10 @@
             </div>
             <div class="col-lg-2 col-md-6">
                 <h5 class="footer-title">Menu</h5>
-                <a href="{{ route('home') }}" class="footer-link">Home</a>
-                <a href="{{ route('katalog') }}" class="footer-link">Produk</a>
-                <a href="{{ route('artikel.index') }}" class="footer-link">Artikel</a>
-                <a href="#promo" class="footer-link">Promo</a>
+                <a href="{{ route('home') }}" class="footer-link">Beranda</a>
+                <a href="{{ route('shop.home') }}" class="footer-link">Toko Online</a>
+                <a href="{{ route('login') }}" class="footer-link">Login</a>
+                <a href="{{ route('order.index') }}" class="footer-link">Order</a>
             </div>
             <div class="col-lg-2 col-md-6">
                 <h5 class="footer-title">Bantuan</h5>
@@ -473,18 +470,18 @@
             <div class="col-lg-4">
                 <h5 class="footer-title">Kontak</h5>
                 <p class="text-muted mb-2">
-                    <i class="bi bi-telephone me-2"></i>{{ $toko->telepon ?? '0812-3456-7890' }}
+                    <i class="bi bi-telephone me-2"></i>{{ $toko->telepon ?? '08213840405' }}
                 </p>
                 <p class="text-muted mb-2">
-                    <i class="bi bi-envelope me-2"></i>{{ $toko->email ?? 'info@tagepetoko.com' }}
+                    <i class="bi bi-envelope me-2"></i>{{ $toko->email ?? 'toko@datastoko.com' }}
                 </p>
                 <p class="text-muted">
-                    <i class="bi bi-geo-alt me-2"></i>{{ $toko->alamat ?? 'Jakarta, Indonesia' }}
+                    <i class="bi bi-geo-alt me-2"></i>{{ $toko->alamat ?? 'Jln pahlawan kel namatio puncak,pahlawan,masohi maluku tengah indonesia.' }}
                 </p>
             </div>
         </div>
         <hr class="my-4" style="border-color: var(--border-color);">
-        <div class="text-center text-muted">
+        <div class="text-center" style="color: rgba(255, 255, 255, 0.7);">
             <p class="mb-0">&copy; 2026 {{ $toko->nama_toko ?? 'Tagepe-digital UMKM' }}. Dibuat dengan ❤️ dan bismillah</p>
         </div>
     </div>

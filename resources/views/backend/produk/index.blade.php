@@ -3,7 +3,24 @@
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0">Daftar Produk</h5>
+    <div>
+        <h5 class="mb-0">
+            Daftar Produk
+            @if(isset($kategoriDipilih))
+                <span class="badge bg-primary ms-2">
+                    <i class="bi bi-tag me-1"></i>{{ $kategoriDipilih->nama }}
+                </span>
+            @endif
+        </h5>
+        @if(isset($kategoriDipilih))
+            <small class="text-muted">
+                Menampilkan produk kategori: {{ $kategoriDipilih->nama }}
+                <a href="{{ route('produk.index') }}" class="text-primary ms-2">
+                    <i class="bi bi-x-circle"></i> Hapus Filter
+                </a>
+            </small>
+        @endif
+    </div>
     <div class="d-flex gap-2">
         {{-- Search --}}
         <input type="text" id="searchProduk" class="form-control form-control-sm" placeholder="🔍 Cari produk..." style="width:200px">

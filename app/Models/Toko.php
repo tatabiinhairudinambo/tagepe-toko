@@ -15,5 +15,7 @@ class Toko extends Model
         'telepon',
         'email',
         'logo',
+        'domain',
+        'database_name',
     ];
 }

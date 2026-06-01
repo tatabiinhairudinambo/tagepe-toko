@@ -15,16 +15,17 @@
         }
         
         :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --dark: #2c3e50;
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
         }
         
         body { 
-            background: #f8f9fa;
+            background: linear-gradient(180deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
             font-family: 'Poppins', sans-serif;
             position: relative;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         /* Animated Background Shapes - Geometric */
@@ -245,8 +246,8 @@
 
         /* Navbar */
         .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #2c3e50, #34495e) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             animation: navSlideDown 0.6s ease-out;
         }
         
@@ -313,7 +314,7 @@
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
             padding: 72px 0 56px;
             text-align: center;
@@ -461,15 +462,22 @@
         .search-box input {
             border-radius: 50px;
             padding: 12px 50px 12px 20px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
         
         .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.3);
             outline: none;
+            background: rgba(255, 255, 255, 0.15);
         }
         
         .search-box i {
@@ -477,7 +485,7 @@
             right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--primary);
+            color: rgba(255, 255, 255, 0.6);
             animation: searchIconPulse 2s ease-in-out infinite;
         }
         
@@ -507,12 +515,13 @@
             border-radius: 50px;
             padding: 8px 20px;
             font-size: .875rem;
-            border: 2px solid #e0e0e0;
-            background: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         
         .filter-pill::before {
@@ -535,15 +544,16 @@
         
         .filter-pill:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.15);
         }
         
         .filter-pill.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--accent), #2980b9);
+            border-color: var(--accent);
             color: white;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
             animation: filterActivePulse 0.5s ease-out;
         }
         
@@ -806,6 +816,215 @@
             background: linear-gradient(135deg, var(--secondary), #27ae60) !important;
         }
 
+        /* Pagination */
+        .pagination-section {
+            margin-top: 48px;
+            margin-bottom: 64px;
+            text-align: center;
+        }
+        
+        .pagination-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pagination-title i {
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination-wrapper .page-link {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .pagination-wrapper .page-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .pagination-wrapper .page-link.active {
+            background: linear-gradient(135deg, var(--accent), #2980b9);
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Promo Section */
+        .promo-section {
+            margin-top: 80px;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+            font-size: 2.2rem;
+        }
+        
+        .promo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            height: 100%;
+        }
+        
+        .promo-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(52, 152, 219, 0.3);
+        }
+        
+        .promo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .promo-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .promo-card .card-body {
+            padding: 24px;
+        }
+        
+        .promo-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .promo-card h5 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+        
+        .promo-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Artikel Section */
+        .artikel-section {
+            margin-top: 60px;
+            padding: 60px 0;
+        }
+        
+        .artikel-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            height: 100%;
+        }
+        
+        .artikel-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(52, 152, 219, 0.3);
+        }
+        
+        .artikel-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .artikel-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .artikel-card .card-body {
+            padding: 24px;
+        }
+        
+        .artikel-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .artikel-kategori {
+            display: inline-block;
+            padding: 5px 14px;
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .artikel-tanggal {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .artikel-card h5 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .artikel-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
         /* Empty State */
         .empty-state {
             animation: emptyStateFadeIn 0.8s ease-out;
@@ -833,7 +1052,7 @@
 
         /* Footer */
         footer { 
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             color: rgba(255, 255, 255, 0.9);
             padding: 32px 0;
             margin-top: 64px;
@@ -957,9 +1176,6 @@
             <i class="bi bi-shop me-2"></i>{{ $toko->nama_toko ?? 'Data Toko' }}
         </span>
         <div class="d-flex gap-2">
-            <a href="{{ route('artikel.index') }}" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-newspaper me-1"></i>Artikel & Promo
-            </a>
             <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
                 <i class="bi bi-box-arrow-in-right me-1"></i>Login Admin
             </a>
@@ -995,7 +1211,7 @@
 
     {{-- Filter Kategori --}}
     <div class="d-flex flex-wrap gap-2 mb-4 align-items-center filter-container">
-        <span class="text-muted small me-1">Filter:</span>
+        <span class="small me-1" style="color: rgba(255, 255, 255, 0.7);">Filter:</span>
         <button class="filter-pill active" onclick="filterKategori('semua', this)">Semua</button>
         @foreach($kategoris as $k)
             <button class="filter-pill" onclick="filterKategori('{{ $k->id }}', this)">
@@ -1006,8 +1222,8 @@
 
     {{-- Grid Produk --}}
     @if($produks->isEmpty())
-        <div class="text-center py-5 text-muted empty-state">
-            <i class="bi bi-box-seam" style="font-size:3rem"></i>
+        <div class="text-center py-5 empty-state" style="color: rgba(255, 255, 255, 0.7);">
+            <i class="bi bi-box-seam" style="font-size:3rem; color: rgba(255, 255, 255, 0.5);"></i>
             <p class="mt-3">Belum ada produk tersedia.</p>
         </div>
     @else
@@ -1056,7 +1272,69 @@
             </div>
             @endforeach
         </div>
+
+        {{-- Pagination --}}
+        <div class="pagination-section">
+            <h3 class="pagination-title">
+                <i class="bi bi-arrow-right-circle"></i>
+                Lihat Produk Lainnya
+            </h3>
+            <div class="pagination-wrapper">
+                {{ $produks->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
     @endif
+
+    {{-- Promo Section --}}
+    <div class="promo-section">
+        <h2 class="section-title">
+            <i class="bi bi-gift"></i>
+            Promo & Penawaran Spesial
+        </h2>
+        <div class="row g-4">
+            @foreach($promosis as $promo)
+            <div class="col-md-4">
+                <div class="promo-card card">
+                    <img src="{{ $promo['gambar'] }}" alt="{{ $promo['judul'] }}">
+                    <div class="card-body">
+                        <span class="promo-badge bg-{{ $promo['warna'] }}">{{ $promo['badge'] }}</span>
+                        <h5>{{ $promo['judul'] }}</h5>
+                        <p>{{ $promo['deskripsi'] }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    {{-- Artikel Section --}}
+    <div class="artikel-section">
+        <h2 class="section-title">
+            <i class="bi bi-newspaper"></i>
+            Artikel & Tips
+        </h2>
+        <div class="row g-4">
+            @foreach($artikels as $artikel)
+            <div class="col-md-4">
+                <div class="artikel-card card">
+                    <img src="{{ $artikel['gambar'] }}" alt="{{ $artikel['judul'] }}">
+                    <div class="card-body">
+                        <div class="artikel-meta">
+                            <span class="artikel-kategori">{{ $artikel['kategori'] }}</span>
+                            <span class="artikel-tanggal">
+                                <i class="bi bi-calendar3"></i>
+                                {{ \Carbon\Carbon::parse($artikel['tanggal'])->format('d M Y') }}
+                            </span>
+                        </div>
+                        <h5>{{ $artikel['judul'] }}</h5>
+                        <p>{{ $artikel['excerpt'] }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
 </div>
 
 {{-- Footer --}}
@@ -1107,8 +1385,6 @@ function filterKategori(id, el) {
             item.style.display = 'none';
         }
     });
-    
-    playClickSound();
 }
 
 // Search functionality
@@ -1134,103 +1410,12 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
     });
 });
 
-// Add sound effects
-document.querySelectorAll('.filter-pill').forEach(pill => {
-    pill.addEventListener('click', function() {
-        playClickSound();
-    });
-    
-    pill.addEventListener('mouseenter', function() {
-        playHoverSound();
-    });
-});
-
-// Product card hover sound
+// Product card click sparkles (visual only, no sound)
 document.querySelectorAll('.produk-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        playCardHoverSound();
-    });
-    
     card.addEventListener('click', function() {
-        playCardClickSound();
         createSparkles(this);
     });
 });
-
-// Sound functions
-function playClickSound() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    osc.connect(gain);
-    gain.connect(audioContext.destination);
-    
-    osc.frequency.value = 800;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-    
-    osc.start(audioContext.currentTime);
-    osc.stop(audioContext.currentTime + 0.1);
-}
-
-function playHoverSound() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    osc.connect(gain);
-    gain.connect(audioContext.destination);
-    
-    osc.frequency.value = 600;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.03, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-    
-    osc.start(audioContext.currentTime);
-    osc.stop(audioContext.currentTime + 0.05);
-}
-
-function playCardHoverSound() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    osc.connect(gain);
-    gain.connect(audioContext.destination);
-    
-    osc.frequency.value = 1000;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.05, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
-    
-    osc.start(audioContext.currentTime);
-    osc.stop(audioContext.currentTime + 0.08);
-}
-
-function playCardClickSound() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // Happy chime
-    const notes = [
-        { freq: 523.25, time: 0, duration: 0.1 },
-        { freq: 659.25, time: 0.08, duration: 0.1 },
-        { freq: 783.99, time: 0.16, duration: 0.15 }
-    ];
-    
-    notes.forEach(note => {
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        
-        osc.frequency.value = note.freq;
-        osc.type = 'sine';
-        gain.gain.setValueAtTime(0.15, audioContext.currentTime + note.time);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.time + note.duration);
-        
-        osc.start(audioContext.currentTime + note.time);
-        osc.stop(audioContext.currentTime + note.time + note.duration);
-    });
-}
 
 // Create sparkles on click
 function createSparkles(element) {
@@ -1265,33 +1450,6 @@ function createSparkles(element) {
         }, 1000);
     }
 }
-
-// Welcome sound on page load
-window.addEventListener('load', function() {
-    setTimeout(() => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const notes = [
-            { freq: 523.25, time: 0, duration: 0.15 },
-            { freq: 659.25, time: 0.15, duration: 0.15 },
-            { freq: 783.99, time: 0.3, duration: 0.2 }
-        ];
-        
-        notes.forEach(note => {
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.frequency.value = note.freq;
-            osc.type = 'sine';
-            gain.gain.setValueAtTime(0.1, audioContext.currentTime + note.time);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.time + note.duration);
-            
-            osc.start(audioContext.currentTime + note.time);
-            osc.stop(audioContext.currentTime + note.time + note.duration);
-        });
-    }, 500);
-});
 </script>
 </body>
 </html>

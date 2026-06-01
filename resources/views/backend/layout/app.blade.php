@@ -3,10 +3,14 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Data Toko - @yield('title', 'Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
     <style>
         :root { 
             --sidebar-w: 240px;
@@ -182,6 +186,14 @@
             padding: 8px 12px 8px 44px;
             font-size: .85rem;
             margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sidebar-nav .submenu a .badge {
+            font-size: .65rem;
+            padding: 2px 6px;
+            margin-left: auto;
         }
         .sidebar-nav .menu-toggle {
             cursor: pointer;
@@ -265,6 +277,31 @@
             background: var(--bg-secondary) !important;
             border-color: var(--border-color) !important;
             color: var(--text-primary) !important;
+        }
+        
+        /* Dark Mode - Force white text in cards */
+        [data-theme="dark"] .card .text-dark,
+        [data-theme="dark"] .card .text-muted,
+        [data-theme="dark"] .card .fw-bold,
+        [data-theme="dark"] .card .small,
+        [data-theme="dark"] .card span,
+        [data-theme="dark"] .card div:not(.badge) {
+            color: #ffffff !important;
+        }
+        
+        /* Dark Mode - Ensure gradient cards have white text */
+        [data-theme="dark"] .card [style*="background:linear-gradient"] .text-muted,
+        [data-theme="dark"] .card [style*="background:linear-gradient"] .text-dark,
+        [data-theme="dark"] .card [style*="background:linear-gradient"] .fw-bold,
+        [data-theme="dark"] .card [style*="background:linear-gradient"] span,
+        [data-theme="dark"] .card [style*="background:linear-gradient"] div {
+            color: #ffffff !important;
+        }
+        
+        /* Dark Mode - Dashboard stat cards */
+        [data-theme="dark"] .card-body .text-uppercase,
+        [data-theme="dark"] .card-body .fw-semibold {
+            color: #ffffff !important;
         }
         
         /* ── Forms ── */
@@ -862,6 +899,11 @@
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-house-door-fill"></i> Dashboard
         </a>
+        
+        {{-- Link Lihat Website --}}
+        <a href="{{ route('shop.home') }}" target="_blank" class="text-info">
+            <i class="bi bi-globe"></i> Lihat Website
+        </a>
 
         @if(Auth::user()->role === 'kasir')
         <div class="nav-label mt-3">Transaksi</div>
@@ -906,8 +948,21 @@
                 <i class="bi bi-box-seam-fill"></i> Produk
             </a>
             <ul class="submenu {{ request()->routeIs('produk.*') || request()->routeIs('kategori.*') ? 'show' : '' }}">
-                <li><a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') ? 'active' : '' }}">Daftar Produk</a></li>
-                <li><a href="{{ route('kategori.index') }}" class="{{ request()->routeIs('kategori.*') ? 'active' : '' }}">Kategori</a></li>
+                <li><a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') && !request()->has('kategori') ? 'active' : '' }}">Semua Produk</a></li>
+                <li><a href="{{ route('kategori.index') }}" class="{{ request()->routeIs('kategori.*') ? 'active' : '' }}">Kelola Kategori</a></li>
+                <li style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.08);">
+                    <span style="color: rgba(255,255,255,.4); font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 0 16px;">Filter Kategori</span>
+                </li>
+                @php $kategoris = \App\Models\Kategori::withCount('produks')->get(); @endphp
+                @foreach($kategoris as $kat)
+                <li>
+                    <a href="{{ route('produk.index', ['kategori' => $kat->id]) }}" class="{{ request()->get('kategori') == $kat->id ? 'active' : '' }}">
+                        <i class="bi bi-tag" style="font-size: .9rem; opacity: .7;"></i>
+                        {{ $kat->nama }}
+                        <span class="badge bg-secondary ms-auto" style="font-size: .65rem; padding: 2px 6px;">{{ $kat->produks_count }}</span>
+                    </a>
+                </li>
+                @endforeach
             </ul>
         </div>
         
