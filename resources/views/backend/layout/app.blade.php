@@ -914,7 +914,7 @@
                 <i class="bi bi-cash-coin"></i> Transaksi
             </a>
             <ul class="submenu {{ request()->routeIs('transaksi.*') || request()->routeIs('order.kasir.*') || request()->routeIs('pemesanan.*') ? 'show' : '' }}">
-                <li><a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') ? 'active' : '' }}">Kasir</a></li>
+                <li><a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') ? 'active' : '' }}">Order Offline</a></li>
                 <li>
                     <a href="{{ route('order.kasir.index') }}" class="{{ request()->routeIs('order.kasir.*') ? 'active' : '' }}">
                         Order Online
