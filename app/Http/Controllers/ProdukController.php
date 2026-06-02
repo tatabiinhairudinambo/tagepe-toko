@@ -118,4 +118,53 @@ class ProdukController extends Controller
         $produk->update(['status' => 'aktif']);
         return back()->with('success', 'Produk "' . $produk->nama . '" berhasil disetujui.');
     }
+
+    // Quick search untuk dashboard (AJAX)
+    public function quickSearch(Request $request)
+    {
+        $search = $request->get('q', '');
+        $user = Auth::user();
+        
+        if (strlen($search) < 2) {
+            return response()->json([]);
+        }
+
+        $query = Produk::with(['kategori', 'stokCabangs'])
+            ->where('status', 'aktif')
+            ->where(function($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('kode', 'like', "%{$search}%");
+            });
+
+        // Kasir: filter by cabang
+        if ($user->role === 'kasir' && $user->cabang_id) {
+            $cabang_id = $user->cabang_id;
+            $query->whereHas('stokCabangs', function($q) use ($cabang_id) {
+                $q->where('cabang_id', $cabang_id);
+            });
+        }
+
+        $produks = $query->limit(10)->get()->map(function($produk) use ($user) {
+            // Get stok based on role
+            $stok = 0;
+            if ($user->role === 'kasir' && $user->cabang_id) {
+                $stokCabang = $produk->stokCabangs->where('cabang_id', $user->cabang_id)->first();
+                $stok = $stokCabang ? $stokCabang->stok : 0;
+            } else {
+                $stok = $produk->stok;
+            }
+
+            return [
+                'id' => $produk->id,
+                'nama' => $produk->nama,
+                'kategori' => $produk->kategori->nama ?? '-',
+                'harga' => number_format($produk->harga, 0, ',', '.'),
+                'harga_raw' => $produk->harga,
+                'stok' => $stok,
+                'foto' => $produk->foto ? asset('storage/' . $produk->foto) : null,
+            ];
+        });
+
+        return response()->json($produks);
+    }
 }

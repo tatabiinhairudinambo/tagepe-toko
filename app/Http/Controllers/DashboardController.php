@@ -24,6 +24,21 @@ class DashboardController extends Controller
         $user = Auth::user();
         $cabang_id = ($user->role === 'kasir') ? $user->cabang_id : null;
 
+        // Shift Info - Cari login terakhir user ini hari ini
+        $loginLogToday = null;
+        $shiftDuration = null;
+        if ($user->role === 'kasir') {
+            $loginLogToday = \App\Models\LoginLog::where('user_id', $user->id)
+                ->where('aksi', 'login')
+                ->whereDate('created_at', today())
+                ->latest()
+                ->first();
+            
+            if ($loginLogToday) {
+                $shiftDuration = now()->diffInMinutes($loginLogToday->created_at);
+            }
+        }
+
         // Query transaksi — kasir hanya lihat cabang mereka
         $transaksiQuery = Transaksi::query();
         if ($cabang_id) {
@@ -124,6 +139,9 @@ class DashboardController extends Controller
             'totalTransaksi'   => (clone $transaksiQuery)->count(),
             'cabang'           => $cabang_id ? \App\Models\Cabang::find($cabang_id) : null,
             'grafikBulan'      => $grafikQuery->get(),
+            // Shift Info untuk kasir
+            'loginLogToday'    => $loginLogToday,
+            'shiftDuration'    => $shiftDuration,
             // Riwayat aktivitas kasir hari ini (admin only)
             'aktivitasHariIni' => $user->role === 'admin'
                 ? AktivitasKasir::with('user')->whereDate('created_at', today())->latest()->get()

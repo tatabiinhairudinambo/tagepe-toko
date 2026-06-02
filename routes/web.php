@@ -92,6 +92,9 @@ Route::middleware('auth')->group(function () {
     // Laporan transaksi - bisa diakses semua user yang login
     Route::get('/transaksi/laporan', [\App\Http\Controllers\TransaksiController::class, 'laporan'])->name('transaksi.laporan');
 
+    // Quick search produk untuk dashboard
+    Route::get('/api/produk/search', [ProdukController::class, 'quickSearch'])->name('produk.quickSearch');
+
     // Route parameter di bawah route statis
     Route::get('/transaksi/{id}', [\App\Http\Controllers\TransaksiController::class, 'show'])->name('transaksi.show');
     Route::get('/transaksi/{id}/struk', [\App\Http\Controllers\TransaksiController::class, 'struk'])->name('transaksi.struk');

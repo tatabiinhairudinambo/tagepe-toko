@@ -3,6 +3,41 @@
 
 @push('styles')
 <style>
+    /* Quick Search Styling */
+    #searchResults .search-item {
+        padding: 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: 1px solid #e9ecef;
+        margin-bottom: 8px;
+    }
+    #searchResults .search-item:hover {
+        background: #f8f9fa;
+        border-color: #3498db;
+        transform: translateX(3px);
+    }
+    #searchResults .search-item img {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    #searchResults .search-item .no-image {
+        width: 48px;
+        height: 48px;
+        background: #e8edf2;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .search-loading {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+    }
+    
     /* Responsive Dashboard */
     @media (max-width: 992px) {
         .row.g-3 > [class*='col-md-'] {
@@ -30,6 +65,14 @@
         }
         .row.g-3 > div {
             padding: 0 !important;
+        }
+        #searchResults .search-item {
+            padding: 10px;
+        }
+        #searchResults .search-item img,
+        #searchResults .search-item .no-image {
+            width: 40px;
+            height: 40px;
         }
     }
     
@@ -100,16 +143,67 @@
 
 {{-- Info Cabang untuk Kasir --}}
 @if(Auth::user()->role === 'kasir')
-<div class="alert border-0 shadow-sm mb-4 d-flex align-items-center gap-3" 
-     style="background:linear-gradient(135deg,#3498db,#2980b9);color:white;border-radius:14px">
-    <i class="bi bi-building" style="font-size:2rem"></i>
-    <div>
-        <div class="fw-bold" style="font-size:1.1rem">{{ $cabang->nama_cabang ?? 'Belum ada cabang' }}</div>
-        <div class="small opacity-75">Pendapatan hari ini: Rp {{ number_format($totalPendapatanHariIni ?? 0, 0, ',', '.') }}</div>
+<div class="row g-3 mb-4">
+    <div class="col-lg-8">
+        <div class="alert border-0 shadow-sm h-100 mb-0 d-flex align-items-center gap-3" 
+             style="background:linear-gradient(135deg,#3498db,#2980b9);color:white;border-radius:14px">
+            <i class="bi bi-building" style="font-size:2rem"></i>
+            <div>
+                <div class="fw-bold" style="font-size:1.1rem">{{ $cabang->nama_cabang ?? 'Belum ada cabang' }}</div>
+                <div class="small opacity-75">Pendapatan hari ini: Rp {{ number_format($totalPendapatanHariIni ?? 0, 0, ',', '.') }}</div>
+            </div>
+            <div class="ms-auto text-end">
+                <div class="small opacity-75">Total Transaksi</div>
+                <div class="fw-bold fs-4">{{ $jumlahTransaksiHariIni ?? 0 }}</div>
+            </div>
+        </div>
     </div>
-    <div class="ms-auto text-end">
-        <div class="small opacity-75">Total Transaksi</div>
-        <div class="fw-bold fs-4">{{ $jumlahTransaksiHariIni ?? 0 }}</div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:14px;background:linear-gradient(135deg,#16a085,#138d75);color:white">
+            <div class="card-body d-flex flex-column justify-content-center p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-clock-fill" style="font-size:1.5rem"></i>
+                    <div>
+                        <div class="fw-bold" style="font-size:.9rem">Shift Info</div>
+                        @if($loginLogToday)
+                        <div class="small opacity-75">Login: {{ $loginLogToday->created_at->format('H:i') }} WIB</div>
+                        @else
+                        <div class="small opacity-75">Belum login hari ini</div>
+                        @endif
+                    </div>
+                </div>
+                @if($shiftDuration !== null)
+                <div class="text-center mt-1">
+                    <div class="small opacity-75">Durasi Shift</div>
+                    <div class="fw-bold fs-5">
+                        {{ floor($shiftDuration / 60) }} jam {{ $shiftDuration % 60 }} menit
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Quick Search Produk --}}
+<div class="card border-0 shadow-sm mb-4" style="border-radius:14px">
+    <div class="card-body p-3">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-search text-primary" style="font-size:1.3rem"></i>
+            <h6 class="fw-bold mb-0" style="font-size:.95rem">Cari Produk Cepat</h6>
+        </div>
+        <div class="position-relative">
+            <input type="text" 
+                   id="quickSearch" 
+                   class="form-control form-control-lg" 
+                   placeholder="Ketik nama produk untuk cek stok & harga..." 
+                   autocomplete="off"
+                   style="border-radius:10px;padding-left:45px;border:2px solid #e9ecef">
+            <i class="bi bi-search position-absolute" style="left:15px;top:50%;transform:translateY(-50%);color:#adb5bd;font-size:1.2rem"></i>
+        </div>
+        <div id="searchResults" class="mt-3" style="display:none">
+            <!-- Results will be populated here -->
+        </div>
     </div>
 </div>
 
@@ -634,5 +728,84 @@ new Chart(document.getElementById('grafikDashboard'), {
         }
     }
 });
+
+// Quick Search Functionality
+@if(Auth::user()->role === 'kasir')
+const quickSearchInput = document.getElementById('quickSearch');
+const searchResults = document.getElementById('searchResults');
+let searchTimeout = null;
+
+quickSearchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    const query = this.value.trim();
+    
+    if (query.length < 2) {
+        searchResults.style.display = 'none';
+        searchResults.innerHTML = '';
+        return;
+    }
+    
+    // Show loading
+    searchResults.style.display = 'block';
+    searchResults.innerHTML = '<div class="search-loading"><i class="bi bi-hourglass-split"></i> Mencari produk...</div>';
+    
+    // Debounce search
+    searchTimeout = setTimeout(() => {
+        fetch("{{ route('produk.quickSearch') }}?q=" + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    searchResults.innerHTML = '<div class="text-center text-muted py-3"><i class="bi bi-inbox"></i><br>Produk tidak ditemukan</div>';
+                    return;
+                }
+                
+                let html = '';
+                data.forEach(produk => {
+                    const stokBadge = produk.stok > 0 
+                        ? `<span class="badge bg-success" style="border-radius:50px">${produk.stok} tersedia</span>`
+                        : `<span class="badge bg-danger" style="border-radius:50px">Habis</span>`;
+                    
+                    const imageHtml = produk.foto 
+                        ? `<img src="${produk.foto}" alt="${produk.nama}">`
+                        : `<div class="no-image"><i class="bi bi-image text-muted"></i></div>`;
+                    
+                    html += `
+                        <div class="search-item d-flex align-items-center gap-3">
+                            ${imageHtml}
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold mb-1">${produk.nama}</div>
+                                <div class="small text-muted">
+                                    <span class="badge bg-light text-dark me-2" style="border-radius:50px">${produk.kategori}</span>
+                                    <span class="text-primary fw-semibold">Rp ${produk.harga}</span>
+                                </div>
+                            </div>
+                            ${stokBadge}
+                        </div>
+                    `;
+                });
+                
+                searchResults.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Search error:', error);
+                searchResults.innerHTML = '<div class="text-center text-danger py-3"><i class="bi bi-exclamation-triangle"></i><br>Terjadi kesalahan</div>';
+            });
+    }, 300);
+});
+
+// Close search results when clicking outside
+document.addEventListener('click', function(e) {
+    if (!quickSearchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = 'none';
+    }
+});
+
+// Re-open search results when focusing input
+quickSearchInput.addEventListener('focus', function() {
+    if (this.value.trim().length >= 2 && searchResults.innerHTML !== '') {
+        searchResults.style.display = 'block';
+    }
+});
+@endif
 </script>
 @endpush
