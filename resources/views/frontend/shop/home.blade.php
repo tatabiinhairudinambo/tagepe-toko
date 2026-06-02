@@ -419,7 +419,7 @@
                         Temukan produk berkualitas dengan harga terbaik. Pengalaman belanja online yang menyenangkan dimulai dari sini.
                     </p>
                     <div class="hero-buttons d-flex gap-3 flex-wrap">
-                        <a href="{{ route('katalog') }}" class="btn btn-primary btn-lg">
+                        <a href="{{ route('shop.home') }}" class="btn btn-primary btn-lg">
                             <i class="bi bi-grid me-2"></i>Lihat Produk
                         </a>
                         <a href="{{ route('order.index') }}" class="btn btn-outline-primary btn-lg">
@@ -554,7 +554,7 @@
         </div>
         
         <div class="text-center mt-5">
-            <a href="{{ route('katalog') }}" class="btn btn-outline-primary btn-lg">
+            <a href="{{ route('shop.home') }}" class="btn btn-outline-primary btn-lg">
                 Lihat Semua Produk <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
@@ -569,7 +569,7 @@
                 <div class="col-lg-8">
                     <h2 class="display-5 fw-bold mb-3">🎉 Promo Spesial Hari Ini!</h2>
                     <p class="lead mb-4">Dapatkan diskon hingga 50% untuk produk pilihan. Buruan sebelum kehabisan!</p>
-                    <a href="{{ route('katalog') }}" class="btn btn-light btn-lg">
+                    <a href="{{ route('shop.home') }}" class="btn btn-light btn-lg">
                         <i class="bi bi-tag me-2"></i>Lihat Promo
                     </a>
                 </div>

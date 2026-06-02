@@ -105,13 +105,232 @@
     <i class="bi bi-building" style="font-size:2rem"></i>
     <div>
         <div class="fw-bold" style="font-size:1.1rem">{{ $cabang->nama_cabang ?? 'Belum ada cabang' }}</div>
-        <div class="small opacity-75">Pendapatan hari ini: Rp {{ number_format(\App\Models\Transaksi::where('cabang_id', Auth::user()->cabang_id)->whereDate('tanggal', today())->sum('total'), 0, ',', '.') }}</div>
+        <div class="small opacity-75">Pendapatan hari ini: Rp {{ number_format($totalPendapatanHariIni ?? 0, 0, ',', '.') }}</div>
     </div>
     <div class="ms-auto text-end">
         <div class="small opacity-75">Total Transaksi</div>
-        <div class="fw-bold fs-4">{{ $totalTransaksi }}</div>
+        <div class="fw-bold fs-4">{{ $jumlahTransaksiHariIni ?? 0 }}</div>
     </div>
 </div>
+
+{{-- Quick Action Buttons untuk Kasir --}}
+<div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <a href="{{ route('transaksi.index') }}" class="btn btn-lg w-100 text-start d-flex align-items-center gap-3 border-0 shadow-sm" 
+           style="background:linear-gradient(135deg,#2ecc71,#27ae60);color:white;border-radius:12px;padding:1.25rem">
+            <i class="bi bi-cart-plus" style="font-size:2.5rem"></i>
+            <div>
+                <div class="fw-bold" style="font-size:1.1rem">Transaksi Baru</div>
+                <div class="small opacity-75">Buat transaksi</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <a href="{{ route('produk.index') }}" class="btn btn-lg w-100 text-start d-flex align-items-center gap-3 border-0 shadow-sm" 
+           style="background:linear-gradient(135deg,#3498db,#2980b9);color:white;border-radius:12px;padding:1.25rem">
+            <i class="bi bi-box-seam" style="font-size:2.5rem"></i>
+            <div>
+                <div class="fw-bold" style="font-size:1.1rem">Cek Stok</div>
+                <div class="small opacity-75">Lihat produk</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <a href="{{ route('pemesanan.index') }}" class="btn btn-lg w-100 text-start d-flex align-items-center gap-3 border-0 shadow-sm" 
+           style="background:linear-gradient(135deg,#f39c12,#e67e22);color:white;border-radius:12px;padding:1.25rem">
+            <i class="bi bi-clipboard-check" style="font-size:2.5rem"></i>
+            <div>
+                <div class="fw-bold" style="font-size:1.1rem">Pemesanan</div>
+                <div class="small opacity-75">Kelola order</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <a href="{{ route('order.kasir.index') }}" class="btn btn-lg w-100 text-start d-flex align-items-center gap-3 border-0 shadow-sm" 
+           style="background:linear-gradient(135deg,#9b59b6,#8e44ad);color:white;border-radius:12px;padding:1.25rem">
+            <i class="bi bi-globe" style="font-size:2.5rem"></i>
+            <div>
+                <div class="fw-bold" style="font-size:1.1rem">Order Online</div>
+                <div class="small opacity-75">
+                    @if(isset($pendingOrders) && $pendingOrders > 0)
+                        <span class="badge bg-danger">{{ $pendingOrders }} baru</span>
+                    @else
+                        Tidak ada order
+                    @endif
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+{{-- Shift Summary --}}
+<div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px!important">
+            <div class="card-body text-center p-3">
+                <div class="text-muted small mb-2" style="font-size:.75rem">Transaksi Hari Ini</div>
+                <div class="fs-2 fw-bold text-success">{{ $jumlahTransaksiHariIni ?? 0 }}</div>
+                <div class="small text-muted">transaksi</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px!important">
+            <div class="card-body text-center p-3">
+                <div class="text-muted small mb-2" style="font-size:.75rem">Total Pendapatan</div>
+                <div class="fw-bold text-primary" style="font-size:1.3rem">Rp {{ number_format($totalPendapatanHariIni ?? 0, 0, ',', '.') }}</div>
+                <div class="small text-muted">hari ini</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px!important">
+            <div class="card-body text-center p-3">
+                <div class="text-muted small mb-2" style="font-size:.75rem">Item Terjual</div>
+                <div class="fs-2 fw-bold text-warning">{{ $totalItemTerjualHariIni ?? 0 }}</div>
+                <div class="small text-muted">produk</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px!important">
+            <div class="card-body text-center p-3">
+                <div class="text-muted small mb-2" style="font-size:.75rem">Rata-rata per Transaksi</div>
+                <div class="fw-bold text-info" style="font-size:1.2rem">Rp {{ number_format($rataRataPerTransaksi ?? 0, 0, ',', '.') }}</div>
+                <div class="small text-muted">per transaksi</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Top Products & Low Stock --}}
+<div class="row g-3 mb-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-fire text-danger me-2"></i>Produk Terlaris Hari Ini</h6>
+                @if(isset($topProductsToday) && $topProductsToday->count() > 0)
+                <div class="list-group list-group-flush">
+                    @foreach($topProductsToday as $index => $product)
+                    <div class="list-group-item border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="fw-bold text-muted" style="width:20px">#{{ $index + 1 }}</div>
+                            <div>
+                                <div class="fw-semibold" style="font-size:.9rem">{{ $product->nama }}</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-success" style="border-radius:50px">{{ $product->total_terjual }} terjual</span>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-muted text-center mb-0 py-3">Belum ada penjualan hari ini</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius:12px;border-left:4px solid #e74c3c!important">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle text-warning me-2"></i>Stok Menipis</h6>
+                @if(isset($lowStockProducts) && $lowStockProducts->count() > 0)
+                <div class="list-group list-group-flush">
+                    @foreach($lowStockProducts->take(5) as $item)
+                    <div class="list-group-item border-0 px-0 py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold" style="font-size:.9rem">{{ $item->produk->nama }}</div>
+                            <div class="small text-muted">Min: {{ $item->produk->stok_minimum }}</div>
+                        </div>
+                        <span class="badge {{ $item->stok == 0 ? 'bg-danger' : 'bg-warning text-dark' }}" style="border-radius:50px">
+                            {{ $item->stok }} tersisa
+                        </span>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-muted text-center mb-0 py-3">Semua stok aman</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Recent Transactions & Order Queue --}}
+<div class="row g-3 mb-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm" style="border-radius:12px">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-clock-history text-primary me-2"></i>Transaksi Terakhir</h6>
+                @if(isset($recentTransactions) && $recentTransactions->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="small">Kode</th>
+                                <th class="small">Waktu</th>
+                                <th class="small text-end">Total</th>
+                                <th class="small text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($recentTransactions as $tr)
+                            <tr>
+                                <td class="small fw-semibold">#{{ $tr->id }}</td>
+                                <td class="small">{{ $tr->tanggal->format('H:i') }}</td>
+                                <td class="small text-end fw-bold">Rp {{ number_format($tr->total, 0, ',', '.') }}</td>
+                                <td class="small text-center">
+                                    <a href="{{ route('transaksi.struk', $tr->id) }}" target="_blank" class="btn btn-sm btn-outline-primary" style="border-radius:6px;padding:2px 8px">
+                                        <i class="bi bi-printer"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <p class="text-muted text-center mb-0 py-3">Belum ada transaksi</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm" style="border-radius:12px">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-basket text-success me-2"></i>Antrian Order Online</h6>
+                <div class="d-flex flex-column gap-2">
+                    <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background:#fee;border-left:3px solid #dc3545">
+                        <div>
+                            <div class="small text-muted">Menunggu Diproses</div>
+                            <div class="fw-bold fs-4 text-danger">{{ $pendingOrders ?? 0 }}</div>
+                        </div>
+                        <i class="bi bi-hourglass-split text-danger" style="font-size:2rem;opacity:0.3"></i>
+                    </div>
+                    <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background:#fff3cd;border-left:3px solid #ffc107">
+                        <div>
+                            <div class="small text-muted">Sedang Disiapkan</div>
+                            <div class="fw-bold fs-4 text-warning">{{ $processingOrders ?? 0 }}</div>
+                        </div>
+                        <i class="bi bi-gear-fill text-warning" style="font-size:2rem;opacity:0.3"></i>
+                    </div>
+                    <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background:#d1f2eb;border-left:3px solid #28a745">
+                        <div>
+                            <div class="small text-muted">Selesai Hari Ini</div>
+                            <div class="fw-bold fs-4 text-success">{{ $completedOrdersToday ?? 0 }}</div>
+                        </div>
+                        <i class="bi bi-check-circle-fill text-success" style="font-size:2rem;opacity:0.3"></i>
+                    </div>
+                </div>
+                @if(isset($pendingOrders) && $pendingOrders > 0)
+                <a href="{{ route('order.kasir.index') }}" class="btn btn-primary w-100 mt-3" style="border-radius:8px">
+                    Proses Order Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
 @endif
 
 {{-- Stat Cards --}}

@@ -836,7 +836,7 @@
             <a href="{{ route('order.cek') }}" class="btn btn-sm btn-light rounded-pill">
                 <i class="bi bi-search me-1"></i> Cek Order
             </a>
-            <a href="{{ route('katalog') }}" class="btn btn-sm btn-outline-light rounded-pill">
+            <a href="{{ route('shop.home') }}" class="btn btn-sm btn-outline-light rounded-pill">
                 <i class="bi bi-grid me-1"></i> Katalog
             </a>
         </div>

@@ -917,20 +917,31 @@
                 <li><a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.index') ? 'active' : '' }}">Kasir</a></li>
                 <li>
                     <a href="{{ route('order.kasir.index') }}" class="{{ request()->routeIs('order.kasir.*') ? 'active' : '' }}">
-                        Order Customer
-                        @php $orderMenunggu = \App\Models\OrderPublik::where('status','menunggu')->count(); @endphp
-                        @if($orderMenunggu > 0)
-                            <span class="badge bg-warning text-dark ms-2" style="font-size:.65rem;padding:2px 6px">{{ $orderMenunggu }}</span>
+                        Order Online
+                        @php 
+                            $orderPending = 0;
+                            if (Auth::user()->cabang_id) {
+                                $orderPending = \App\Models\OrderPublik::where('cabang_id', Auth::user()->cabang_id)
+                                    ->where('status','pending')
+                                    ->count();
+                            }
+                        @endphp
+                        @if($orderPending > 0)
+                            <span class="badge bg-danger ms-2" style="font-size:.65rem;padding:2px 6px">{{ $orderPending }}</span>
                         @endif
                     </a>
                 </li>
                 <li><a href="{{ route('pemesanan.index') }}" class="{{ request()->routeIs('pemesanan.*') ? 'active' : '' }}">Pemesanan</a></li>
+                <li><a href="{{ route('transaksi.laporan') }}" class="{{ request()->routeIs('transaksi.laporan') ? 'active' : '' }}">Laporan</a></li>
             </ul>
         </div>
         
         <div class="nav-label mt-3">Produk</div>
-        <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') ? 'active' : '' }}">
+        <a href="{{ route('produk.index') }}" class="{{ request()->routeIs('produk.index') || request()->routeIs('produk.create') ? 'active' : '' }}">
             <i class="bi bi-box-seam-fill"></i> Daftar Produk
+        </a>
+        <a href="{{ route('produk.create') }}" class="{{ request()->routeIs('produk.create') ? 'active' : '' }}">
+            <i class="bi bi-plus-circle-fill"></i> Tambah Produk
         </a>
         @endif
 
@@ -997,7 +1008,7 @@
         @endif
 
         <div class="nav-label mt-3">Lainnya</div>
-        <a href="{{ route('katalog') }}" target="_blank">
+        <a href="{{ route('shop.home') }}" target="_blank">
             <i class="bi bi-globe2"></i> Lihat Website
             <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.7rem;opacity:.5"></i>
         </a>

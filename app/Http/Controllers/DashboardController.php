@@ -44,7 +44,78 @@ class DashboardController extends Controller
             $grafikQuery->where('cabang_id', $cabang_id);
         }
 
-        return view('backend.dashboard.index', [
+        // Data khusus untuk KASIR
+        $kasirData = [];
+        if ($user->role === 'kasir' && $cabang_id) {
+            // Shift Summary - Transaksi hari ini
+            $transaksiHariIni = Transaksi::where('cabang_id', $cabang_id)
+                ->whereDate('tanggal', today())
+                ->get();
+            
+            // Top Products Today - Produk terlaris hari ini
+            $topProductsToday = DB::table('transaksi_details')
+                ->join('transaksis', 'transaksi_details.transaksi_id', '=', 'transaksis.id')
+                ->join('produks', 'transaksi_details.produk_id', '=', 'produks.id')
+                ->where('transaksis.cabang_id', $cabang_id)
+                ->whereDate('transaksis.tanggal', today())
+                ->select('produks.nama', DB::raw('SUM(transaksi_details.jumlah) as total_terjual'))
+                ->groupBy('produks.id', 'produks.nama')
+                ->orderByDesc('total_terjual')
+                ->limit(5)
+                ->get();
+            
+            // Recent Transactions - 5 transaksi terakhir
+            $recentTransactions = Transaksi::where('cabang_id', $cabang_id)
+                ->latest('tanggal')
+                ->latest('id')
+                ->take(5)
+                ->get();
+            
+            // Low Stock Alert - Produk stok menipis di cabang kasir
+            $lowStockProducts = \App\Models\StokCabang::with('produk')
+                ->where('cabang_id', $cabang_id)
+                ->whereHas('produk', fn($q) => $q->where('status', 'aktif'))
+                ->whereColumn('stok', '<=', DB::raw('(SELECT stok_minimum FROM produks WHERE produks.id = stok_cabangs.produk_id)'))
+                ->orderBy('stok', 'asc')
+                ->limit(10)
+                ->get();
+            
+            // Customer Orders Queue - Order online pending untuk cabang ini
+            $pendingOrders = \App\Models\OrderPublik::where('cabang_id', $cabang_id)
+                ->where('status', 'pending')
+                ->count();
+            
+            $processingOrders = \App\Models\OrderPublik::where('cabang_id', $cabang_id)
+                ->where('status', 'diproses')
+                ->count();
+            
+            $completedOrdersToday = \App\Models\OrderPublik::where('cabang_id', $cabang_id)
+                ->where('status', 'selesai')
+                ->whereDate('created_at', today())
+                ->count();
+
+            $kasirData = [
+                'transaksiHariIni' => $transaksiHariIni,
+                'jumlahTransaksiHariIni' => $transaksiHariIni->count(),
+                'totalPendapatanHariIni' => $transaksiHariIni->sum('total'),
+                'totalItemTerjualHariIni' => DB::table('transaksi_details')
+                    ->join('transaksis', 'transaksi_details.transaksi_id', '=', 'transaksis.id')
+                    ->where('transaksis.cabang_id', $cabang_id)
+                    ->whereDate('transaksis.tanggal', today())
+                    ->sum('transaksi_details.jumlah'),
+                'rataRataPerTransaksi' => $transaksiHariIni->count() > 0 
+                    ? $transaksiHariIni->sum('total') / $transaksiHariIni->count() 
+                    : 0,
+                'topProductsToday' => $topProductsToday,
+                'recentTransactions' => $recentTransactions,
+                'lowStockProducts' => $lowStockProducts,
+                'pendingOrders' => $pendingOrders,
+                'processingOrders' => $processingOrders,
+                'completedOrdersToday' => $completedOrdersToday,
+            ];
+        }
+
+        return view('backend.dashboard.index', array_merge([
             'totalKategori'    => Kategori::count(),
             'totalProduk'      => Produk::count(),
             'totalNilai'       => Produk::selectRaw('SUM(harga * stok) as total')->value('total') ?? 0,
@@ -65,6 +136,6 @@ class DashboardController extends Controller
             'loginLogs'        => $user->role === 'admin'
                 ? \App\Models\LoginLog::with('user')->whereDate('created_at', today())->latest()->get()
                 : collect(),
-        ]);
+        ], $kasirData));
     }
 }

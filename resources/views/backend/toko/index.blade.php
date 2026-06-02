@@ -75,7 +75,7 @@
                         <a href="{{ route('toko.edit', $toko->id) }}" class="btn btn-primary" style="border-radius:8px">
                             <i class="bi bi-pencil me-1"></i> Edit Data Toko
                         </a>
-                        <a href="{{ route('katalog') }}" target="_blank" class="btn btn-outline-secondary" style="border-radius:8px">
+                        <a href="{{ route('shop.home') }}" target="_blank" class="btn btn-outline-secondary" style="border-radius:8px">
                             <i class="bi bi-eye me-1"></i> Lihat Katalog Publik
                         </a>
                     </div>
