@@ -12,8 +12,10 @@ use Illuminate\Support\Facades\Route;
 // ============================================
 // FRONTEND ROUTES (Public)
 // ============================================
-// Homepage = Login page dengan Landing Content (Sistem Utama)
-Route::get('/', [AuthController::class, 'showLogin'])->name('home');
+// Homepage = Landing Page
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
 
 // Toko Online Routes (Untuk Customer)
 Route::prefix('shop')->name('shop.')->group(function () {
