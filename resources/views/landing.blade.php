@@ -2,10 +2,15 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TAGEPE - Sistem POS Modern untuk UMKM</title>
+    
+    <!-- PWA Meta Tags -->
+    @include('components.pwa-meta')
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/app-mode.css" rel="stylesheet">
     <style>
         :root {
             --primary: #0066FF;
@@ -347,10 +352,13 @@
                 <a class="navbar-brand" href="/">
                     <i class="bi bi-shop"></i> TAGEPE
                 </a>
-                <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-3">
                     <a href="#about" class="nav-link">Tentang</a>
                     <a href="#features" class="nav-link">Fitur</a>
                     <a href="#testimonials" class="nav-link">Testimoni</a>
+                    <a href="{{ route('register') }}" class="nav-link" style="color: var(--secondary); font-weight: 600;">
+                        Daftar Gratis
+                    </a>
                     <a href="{{ route('login') }}" class="btn-login">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Login
                     </a>
@@ -366,8 +374,8 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h1>Sistem POS Modern untuk UMKM Indonesia</h1>
                     <p>Kelola toko, stok, transaksi, dan laporan dengan mudah. Tingkatkan produktivitas bisnis Anda dengan TAGEPE.</p>
-                    <a href="{{ route('login') }}" class="btn-cta">
-                        Mulai Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                    <a href="{{ route('register') }}" class="btn-cta">
+                        Daftar Gratis Sekarang <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
                 <div class="col-lg-6">
@@ -568,8 +576,8 @@
         <div class="container">
             <h2>Siap Meningkatkan Bisnis Anda?</h2>
             <p>Bergabunglah dengan ratusan UMKM yang sudah menggunakan TAGEPE</p>
-            <a href="{{ route('login') }}" class="btn-cta">
-                Coba Gratis Sekarang <i class="bi bi-arrow-right ms-2"></i>
+            <a href="{{ route('register') }}" class="btn-cta">
+                Daftar Gratis Sekarang <i class="bi bi-arrow-right ms-2"></i>
             </a>
         </div>
     </section>

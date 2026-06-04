@@ -24,3 +24,17 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Emulator testing files
+*.bat
+screenshot-*.png
+emulator-*.png
+
+# Redundant documentation (keep only PWA_SETUP.md and build-apk-simple.md)
+CARA_INSTALL_ICON_LAUNCHER.md
+EMULATOR_SOLUTION.md
+EMULATOR_SPEED_REPORT.md
+INSTALL_GUIDE_EMULATOR.md
+QUICK_START.md
+README_EMULATOR_CHECK.md
+TEST_DESKTOP_MOBILE_VIEW.md

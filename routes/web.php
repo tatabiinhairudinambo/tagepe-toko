@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('landing');
 })->name('home');
 
+// Test Emulator (Super Fast Page)
+Route::get('/test-emulator', function () {
+    return view('test-emulator');
+})->name('test.emulator');
+
 // Toko Online Routes (Untuk Customer)
 Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Frontend\ShopController::class, 'index'])->name('home');
@@ -35,6 +40,9 @@ Route::get('/order/cek', [\App\Http\Controllers\OrderPublikController::class, 'c
 // AUTHENTICATION ROUTES
 // ============================================
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/login-lite', function() {
+    return view('auth.login-lite');
+})->name('login.lite');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
